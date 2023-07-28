@@ -1,0 +1,7 @@
+(BLOCK
+  (SET a 10)
+  (SET b 3)
+  (SET iratio (DIV a b))
+  (SET nearest (MUL b iratio))
+  (PRINT (SUB a nearest)))
+	        
