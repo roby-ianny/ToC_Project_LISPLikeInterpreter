@@ -18,7 +18,7 @@ class Tokenizer
 
     private:
     //il metodo genera la sequenza di token a partire dal file di input
-    void tokenizeInputFile(std::ifstream& inputFile, std::vector<Token> inputTokens);
+    void tokenizeInputFile(std::ifstream& inputFile, std::vector<Token>& inputTokens);
 };
 
 #endif

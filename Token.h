@@ -41,6 +41,7 @@ struct Token
     static constexpr int RP     = 18;
     static constexpr int NUM    = 19;
     static constexpr int VAR    = 20;
+    /*DA IMPLEMENTARE BLOCK!!!*/
 
     static constexpr char* id2word[]{   //Vettore per passare dal termine in input al token corrispondente
         "SET", "PRINT", "INPUT", "IF", "WHILE", "ADD", "SUB", "MUL", "DIV",

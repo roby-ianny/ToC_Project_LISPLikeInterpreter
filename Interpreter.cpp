@@ -6,10 +6,12 @@
 #include "Exceptions.h"
 #include "Token.h"
 #include "Tokenizer.h"
+/*
 #include "Statement.h"
 #include "StatementManager.h"
 #include "Parser.h"
 #include "Visitor.h"
+*/
 
 int main(int argc, char *argv[])
 {
@@ -27,11 +29,22 @@ int main(int argc, char *argv[])
     }
     catch(const std::exception& e)
     {
-        std::cerr << "Non posso aprire il file " << argv[1] << std::endl
+        std::cerr << "Non posso aprire il file " << argv[1] << std::endl;
         std::cerr << e.what() << std::endl ;
-        return EXIT_FAILURE
+        return EXIT_FAILURE;
     }
     
     /* FASE 1 - Tokenizzazione */
 
+    Tokenizer tokenize;
+    std::vector<Token> inputTokens;
+
+    inputTokens = std::move(tokenize(inputFile));
+
+    for(Token t : inputTokens){
+        std::cout << t << std::endl;
+    }
+
+    /*Chiudo il file*/
+    inputFile.close();
 }
