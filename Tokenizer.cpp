@@ -5,6 +5,77 @@
 #include "Tokenizer.h"
 #include "Exceptions.h"
 
+void generateToken(std::string term, std::vector<Token> Tokens)
+{
+    if (term == "SET"){
+            Tokens.push_back(Token{ Token::SET, Token::id2word[Token::SET]});
+            term.clear();
+        } else if (term == "PRINT"){
+            Tokens.push_back(Token{ Token::PRINT, Token::id2word[Token::PRINT]});
+            term.clear();
+        } else if (term == "INPUT")
+        {
+            Tokens.push_back(Token{ Token::INPUT, Token::id2word[Token::INPUT]});
+            term.clear();
+        }  else if (term == "IF")
+        {
+            Tokens.push_back(Token{ Token::IF, Token::id2word[Token::IF]});
+            term.clear();
+        } else if (term == "WHILE")
+        {
+            Tokens.push_back(Token{ Token::WHILE, Token::id2word[Token::WHILE]});
+            term.clear();
+        }  else if (term == "ADD")
+        {
+            Tokens.push_back(Token{ Token::ADD, Token::id2word[Token::ADD]});
+            term.clear();
+        }  else if (term == "SUB")
+        {
+            Tokens.push_back(Token{ Token::SUB, Token::id2word[Token::SUB]});
+            term.clear();
+        }  else if (term == "MUL")
+        {
+            Tokens.push_back(Token{ Token::MUL, Token::id2word[Token::MUL]});
+            term.clear();
+        }  else if (term == "DIV")
+        {
+            Tokens.push_back(Token{ Token::DIV, Token::id2word[Token::DIV]});
+            term.clear();
+        }  else if (term == "GT")
+        {
+            Tokens.push_back(Token{ Token::GT, Token::id2word[Token::GT]});
+            term.clear();
+        }  else if (term == "LT")
+        {
+            Tokens.push_back(Token{ Token::LT, Token::id2word[Token::LT]});
+            term.clear();
+        }  else if (term == "EQ")
+        {
+            Tokens.push_back(Token{ Token::EQ, Token::id2word[Token::EQ]});
+            term.clear();
+        }  else if (term == "AND")
+        {
+            Tokens.push_back(Token{ Token::AND, Token::id2word[Token::AND]});
+            term.clear();
+        }  else if (term == "OR")
+        {
+            Tokens.push_back(Token{ Token::OR, Token::id2word[Token::OR]});
+            term.clear();
+        }  else if (term == "NOT")
+        {
+            Tokens.push_back(Token{ Token::NOT, Token::id2word[Token::NOT]});
+            term.clear();
+        }  else if (term == "TRUE")
+        {
+            Tokens.push_back(Token{ Token::TRUE, Token::id2word[Token::TRUE]});
+            term.clear();
+        }  else if (term == "FALSE")
+        {
+            Tokens.push_back(Token{ Token::FALSE, Token::id2word[Token::FALSE]});
+            term.clear();
+        }  
+};
+
 void tokenizeInputFile(std::ifstream& inputFile, std::vector<Token> inputTokens)
 {
     // Leggo il file carattere per carattere
@@ -16,87 +87,10 @@ void tokenizeInputFile(std::ifstream& inputFile, std::vector<Token> inputTokens)
     buffer.clear();
 
     while(!inputFile.eof()){
-
-        if (ch == '(')
-        {
-            inputTokens.push_back(Token{ Token::LP, Token::id2word[Token::LP]});
-            buffer.clear();
-        } else if (ch == ')')
-        {
-            inputTokens.push_back(Token{ Token::RP, Token::id2word[Token::RP]});
-            buffer.clear();
-        } else if (std::isspace(ch)) {
-            buffer.clear
+        
+        while (!std::isspace(ch)){
+            buffer += ch;
+            ch = inputFile.get();
         }
         
-        buffer += ch;
-
-        if (buffer == "SET"){
-            inputTokens.push_back(Token{ Token::SET, Token::id2word[Token::SET]});
-            buffer.clear();
-        } else if (buffer == "PRINT"){
-            inputTokens.push_back(Token{ Token::PRINT, Token::id2word[Token::PRINT]});
-            buffer.clear();
-        } else if (buffer == "INPUT")
-        {
-            inputTokens.push_back(Token{ Token::INPUT, Token::id2word[Token::INPUT]});
-            buffer.clear();
-        }  else if (buffer == "IF")
-        {
-            inputTokens.push_back(Token{ Token::IF, Token::id2word[Token::IF]});
-            buffer.clear();
-        } else if (buffer == "WHILE")
-        {
-            inputTokens.push_back(Token{ Token::WHILE, Token::id2word[Token::WHILE]});
-            buffer.clear();
-        }  else if (buffer == "ADD")
-        {
-            inputTokens.push_back(Token{ Token::ADD, Token::id2word[Token::ADD]});
-            buffer.clear();
-        }  else if (buffer == "SUB")
-        {
-            inputTokens.push_back(Token{ Token::SUB, Token::id2word[Token::SUB]});
-            buffer.clear();
-        }  else if (buffer == "MUL")
-        {
-            inputTokens.push_back(Token{ Token::MUL, Token::id2word[Token::MUL]});
-            buffer.clear();
-        }  else if (buffer == "DIV")
-        {
-            inputTokens.push_back(Token{ Token::DIV, Token::id2word[Token::DIV]});
-            buffer.clear();
-        }  else if (buffer == "GT")
-        {
-            inputTokens.push_back(Token{ Token::GT, Token::id2word[Token::GT]});
-            buffer.clear();
-        }  else if (buffer == "LT")
-        {
-            inputTokens.push_back(Token{ Token::LT, Token::id2word[Token::LT]});
-            buffer.clear();
-        }  else if (buffer == "EQ")
-        {
-            inputTokens.push_back(Token{ Token::EQ, Token::id2word[Token::EQ]});
-            buffer.clear();
-        }  else if (buffer == "AND")
-        {
-            inputTokens.push_back(Token{ Token::AND, Token::id2word[Token::AND]});
-            buffer.clear();
-        }  else if (buffer == "OR")
-        {
-            inputTokens.push_back(Token{ Token::OR, Token::id2word[Token::OR]});
-            buffer.clear();
-        }  else if (buffer == "NOT")
-        {
-            inputTokens.push_back(Token{ Token::NOT, Token::id2word[Token::NOT]});
-            buffer.clear();
-        }  else if (buffer == "TRUE")
-        {
-            inputTokens.push_back(Token{ Token::TRUE, Token::id2word[Token::TRUE]});
-            buffer.clear();
-        }  else if (buffer == "FALSE")
-        {
-            inputTokens.push_back(Token{ Token::FALSE, Token::id2word[Token::FALSE]});
-            buffer.clear();
-        }  
-    }
 }
