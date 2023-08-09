@@ -7,7 +7,7 @@
 #include "Exceptions.h"
 
 //Creo la funzione che mi permette di utilizzare più volte la generazione dei token a partire da una stringa
-void generateToken(std::string term, std::vector<Token> Tokens)
+void generateToken(std::string& term, std::vector<Token>& Tokens)
 {
     if (term == "SET"){
             Tokens.push_back(Token{ Token::SET, Token::id2word[Token::SET]});
@@ -76,7 +76,6 @@ void generateToken(std::string term, std::vector<Token> Tokens)
             Tokens.push_back(Token{ Token::FALSE, Token::id2word[Token::FALSE]});
             term.clear();
         }  
-
         /*fin'ora abbiamo visto casi in cui si hanno elementi "costanti", mentre ora dobbiamo fare in modo di convertire elementi variabili in dei Token*/
         // Partiamo quindi dai numeri
         else if (isdigit(term[0]) ) //se il primo termine della stringa corrisponde a un numero
@@ -131,67 +130,34 @@ void Tokenizer::tokenizeInputFile(std::ifstream& inputFile,
     std::string buffer;
     buffer.clear();  
 
-    /* 
-    while(!inputFile.eof())
-    {
-        ch = inputFile.get();
-
-        if (isspace(ch)){
-            buffer.clear();
-            continue;
-        }
-        //finchè non si incontra uno spazio, analizzo un pezzo di testo
-        while (!std::isspace(ch)) {
-            buffer += ch;
-
-            if (ch == '('){     //Se incappo in una parentesi aperta
-                std::cout << "Il buffer contiene: " << buffer << std::endl;
-                buffer.pop_back();
-                generateToken(buffer, inputTokens);     //genero il token di quel che c'era prima della parentesi
-                inputTokens.push_back(Token{ Token::LP, Token::id2word[Token::LP]});        //genero il token della parentesi
-            }
-            else if (ch == ')'){                        //stessa cosa per l'altra parentesi
-                std::cout << "Il buffer contiene: " << buffer << std::endl;
-                buffer.pop_back();
-                generateToken(buffer, inputTokens);
-                inputTokens.push_back(Token{ Token::RP, Token::id2word[Token::RP]});
-            }
-
-            ch = inputFile.get();
-        }
-        //eliminati i casi delle parentesi, si genera il token della porzione di testo
-        std::cout << "buffer: " << buffer << std::endl;
-        generateToken(buffer, inputTokens);
-
-    }
-    */
     while (!inputFile.eof())                //Finché non arrivo alla fine del filea
     {
         ch = inputFile.get();               //Leggo un carattere dal file
         if(std::isspace(ch)) continue;      //Se il carattere letto è uno spazio
         else {
+            buffer.clear();
             do {
                 if (ch == '(')
                 {
-                    std::cout << "Buffer: " << buffer << std::endl;
+                    // std::cout << "Buffer: " << buffer << std::endl;
                     generateToken(buffer, inputTokens);     //genero un token del buffer e lo ripulisco
                     inputTokens.push_back(Token{ Token::LP, Token::id2word[Token::LP]}); //genero il token della parentesi
                 }
                 else if (ch == ')')
                 {
-                    std::cout << "Buffer: " << buffer << std::endl;
+                    // std::cout << "Buffer: " << buffer << std::endl;
                     generateToken(buffer, inputTokens); 
                     inputTokens.push_back(Token{ Token::RP, Token::id2word[Token::RP]});
                 }
                 else{               
                     buffer += ch;                   //Aggiugno il carattere al buffer
-                    ch = inputFile.get();
                 }
+                ch = inputFile.get();
             } while (!std::isspace(ch) && !inputFile.eof());        //Finchè non incontro uno spazio
-        }
-        //se quando esco il buffer è ancora "pieno"
-        std::cout << "Buffer: " << buffer << std::endl;
-        generateToken(buffer, inputTokens);
-        
+            //se quando esco il buffer è ancora "pieno"
+            //std::cout << "Buffer: " << buffer << std::endl;
+            generateToken(buffer, inputTokens);
+
+        }        
     }
 }
