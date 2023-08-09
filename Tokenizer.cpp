@@ -93,6 +93,7 @@ void generateToken(std::string term, std::vector<Token> Tokens)
             /*else
             verrà gestita l'eccezione            
             */
+           term.clear();
         }
 
         //Rimane quindi l'ultimo caso, ovvero quello in cui il vi è corrispondenza con il nome di una variabile
@@ -111,6 +112,7 @@ void generateToken(std::string term, std::vector<Token> Tokens)
             /*else
             verrà gestita l'eccezione
             */
+           term.clear();
         }
         /*else
         verrà gestita l'eccezione in cui non si hanno corrispondenze
@@ -167,24 +169,29 @@ void Tokenizer::tokenizeInputFile(std::ifstream& inputFile,
     {
         ch = inputFile.get();               //Leggo un carattere dal file
         if(std::isspace(ch)) continue;      //Se il carattere letto è uno spazio
-        else do
-        {
-            if (ch == '(')
-            {
-                generateToken(buffer, inputTokens);     //genero un token del buffer e lo ripulisco
-                inputTokens.push_back(Token{ Token::LP, Token::id2word[Token::LP]}); //genero il token della parentesi
-            }
-            else if (ch == ')')
-            {
-                generateToken(buffer, inputTokens); 
-                inputTokens.push_back(Token{ Token::RP, Token::id2word[Token::RP]});
-            }
-            
-            buffer += ch;                   //Aggiugno il carattere al buffer
-            ch = inputFile.get();
-
-        } while (!std::isspace(ch));        //Finchè non incontro uno spazio
-
+        else {
+            do {
+                if (ch == '(')
+                {
+                    std::cout << "Buffer: " << buffer << std::endl;
+                    generateToken(buffer, inputTokens);     //genero un token del buffer e lo ripulisco
+                    inputTokens.push_back(Token{ Token::LP, Token::id2word[Token::LP]}); //genero il token della parentesi
+                }
+                else if (ch == ')')
+                {
+                    std::cout << "Buffer: " << buffer << std::endl;
+                    generateToken(buffer, inputTokens); 
+                    inputTokens.push_back(Token{ Token::RP, Token::id2word[Token::RP]});
+                }
+                else{               
+                    buffer += ch;                   //Aggiugno il carattere al buffer
+                    ch = inputFile.get();
+                }
+            } while (!std::isspace(ch) && !inputFile.eof());        //Finchè non incontro uno spazio
+        }
         //se quando esco il buffer è ancora "pieno"
+        std::cout << "Buffer: " << buffer << std::endl;
         generateToken(buffer, inputTokens);
+        
+    }
 }
