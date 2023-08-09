@@ -88,7 +88,7 @@ void generateToken(std::string term, std::vector<Token> Tokens)
             }
             if (i == term.length())             //se sono arrivato fino alla fine allora la sequenza corrispone a un numero al quale posso associare un token
             {
-                Tokens.push_back(Token{ Token::NUM, Token::id2word[Token::NUM]});
+                Tokens.push_back(Token{ Token::NUM, term});
             }
             /*else
             verrà gestita l'eccezione            
@@ -106,7 +106,7 @@ void generateToken(std::string term, std::vector<Token> Tokens)
             }
             if (i == term.length())
             {
-                Tokens.push_back(Token{ Token::VAR, Token::id2word[Token::VAR]});
+                Tokens.push_back(Token{ Token::VAR, term});
             }
             /*else
             verrà gestita l'eccezione
@@ -114,29 +114,32 @@ void generateToken(std::string term, std::vector<Token> Tokens)
         }
         /*else
         verrà gestita l'eccezione in cui non si hanno corrispondenze
-        */      
+        */  
+
+       term.clear();    //per sicurezza ripulisco il buffer    
 };
 
 void Tokenizer::tokenizeInputFile(std::ifstream& inputFile,
      std::vector<Token>& inputTokens){
     // Leggo il file carattere per carattere
     char ch;
-    ch = inputFile.get();
+    // ch = inputFile.get();
 
     //essendo che noi dobbiamo riconoscere sequenze di caratteri, si introduce allora un buffer
     std::string buffer;
-    buffer.clear();
+    buffer.clear();  
 
+    /* 
     while(!inputFile.eof())
     {
+        ch = inputFile.get();
+
         if (isspace(ch)){
-            ch = inputFile.get();
             buffer.clear();
             continue;
         }
         //finchè non si incontra uno spazio, analizzo un pezzo di testo
-        do {
-            ch = inputFile.get();
+        while (!std::isspace(ch)) {
             buffer += ch;
 
             if (ch == '('){     //Se incappo in una parentesi aperta
@@ -151,9 +154,37 @@ void Tokenizer::tokenizeInputFile(std::ifstream& inputFile,
                 generateToken(buffer, inputTokens);
                 inputTokens.push_back(Token{ Token::RP, Token::id2word[Token::RP]});
             }
-        } while (!std::isspace(ch));
+
+            ch = inputFile.get();
+        }
         //eliminati i casi delle parentesi, si genera il token della porzione di testo
+        std::cout << "buffer: " << buffer << std::endl;
         generateToken(buffer, inputTokens);
 
     }
+    */
+    while (!inputFile.eof())                //Finché non arrivo alla fine del filea
+    {
+        ch = inputFile.get();               //Leggo un carattere dal file
+        if(std::isspace(ch)) continue;      //Se il carattere letto è uno spazio
+        else do
+        {
+            if (ch == '(')
+            {
+                generateToken(buffer, inputTokens);     //genero un token del buffer e lo ripulisco
+                inputTokens.push_back(Token{ Token::LP, Token::id2word[Token::LP]}); //genero il token della parentesi
+            }
+            else if (ch == ')')
+            {
+                generateToken(buffer, inputTokens); 
+                inputTokens.push_back(Token{ Token::RP, Token::id2word[Token::RP]});
+            }
+            
+            buffer += ch;                   //Aggiugno il carattere al buffer
+            ch = inputFile.get();
+
+        } while (!std::isspace(ch));        //Finchè non incontro uno spazio
+
+        //se quando esco il buffer è ancora "pieno"
+        generateToken(buffer, inputTokens);
 }
