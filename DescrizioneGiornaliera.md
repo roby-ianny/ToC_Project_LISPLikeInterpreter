@@ -45,3 +45,7 @@ Sulla falsa riga di quanto fornito nelle dispense e di quanto visto a lezione, i
 Definita la struct token, e l'overload del'operatore di inserimento.
 Iniziato a definire i file Tokenizer.h e Tokenizer.cpp
 
+## Giorno 4 e 5 - 09/08/2023
+Implementato in maniera completa la parte che si occupa dell'analisi lessicale, dal file di input viene adesso generata una sequenza di tokens con il lessema corrispondente
+
+Creazione di uno "scheletro" per l'analisi lessicale, a partire dall'UML

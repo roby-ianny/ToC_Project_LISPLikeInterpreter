@@ -71,11 +71,13 @@ void generateToken(std::string& term, std::vector<Token>& Tokens)
         {
             Tokens.push_back(Token{ Token::TRUE, Token::id2word[Token::TRUE]});
             term.clear();
-        }  else if (term == "FALSE")
-        {
+        }  else if (term == "FALSE"){
             Tokens.push_back(Token{ Token::FALSE, Token::id2word[Token::FALSE]});
             term.clear();
-        }  
+        }  else if ( term == "BLOCK"){
+            Tokens.push_back(Token{ Token::BLOCK, Token::id2word[Token::BLOCK]});
+            term.clear();
+        }
         /*fin'ora abbiamo visto casi in cui si hanno elementi "costanti", mentre ora dobbiamo fare in modo di convertire elementi variabili in dei Token*/
         // Partiamo quindi dai numeri
         else if (isdigit(term[0]) ) //se il primo termine della stringa corrisponde a un numero
@@ -112,7 +114,7 @@ void generateToken(std::string& term, std::vector<Token>& Tokens)
             verrà gestita l'eccezione
             */
            term.clear();
-        }
+        }      
         /*else
         verrà gestita l'eccezione in cui non si hanno corrispondenze
         */  

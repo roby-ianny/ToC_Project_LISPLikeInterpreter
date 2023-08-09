@@ -41,11 +41,12 @@ struct Token
     static constexpr int RP     = 18;
     static constexpr int NUM    = 19;
     static constexpr int VAR    = 20;
+    static constexpr int BLOCK  = 21;
     /*DA IMPLEMENTARE BLOCK!!!*/
 
     static constexpr char* id2word[]{   //Vettore per passare dal termine in input al token corrispondente
         "SET", "PRINT", "INPUT", "IF", "WHILE", "ADD", "SUB", "MUL", "DIV",
-        "GT", "LT", "EQ", "AND", "OR", "NOT", "TRUE", "FALSE", "LP", "RP", "NUM", "VAR"
+        "GT", "LT", "EQ", "AND", "OR", "NOT", "TRUE", "FALSE", "LP", "RP", "NUM", "VAR", "BLOCK"
     };
 
     Token(int t, const char* w) : tag{ t }, word{ w } {}

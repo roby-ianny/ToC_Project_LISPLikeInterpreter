@@ -34,7 +34,9 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
     
-    /* FASE 1 - Tokenizzazione */
+    /* FASE 1 - Tokenizzazione 
+    File interessati: Token.h, Token.cpp, Tokenizer.h, Tokenizer.cpp
+    */
 
     Tokenizer tokenize;
     std::vector<Token> inputTokens;
@@ -44,6 +46,10 @@ int main(int argc, char *argv[])
     for(Token t : inputTokens){
         std::cout << t << std::endl;
     }
+
+    /*Fase 2 - Parsing
+    File interessati:     */
+
 
     /*Chiudo il file*/
     inputFile.close();
