@@ -49,3 +49,12 @@ Iniziato a definire i file Tokenizer.h e Tokenizer.cpp
 Implementato in maniera completa la parte che si occupa dell'analisi lessicale, dal file di input viene adesso generata una sequenza di tokens con il lessema corrispondente
 
 Creazione di uno "scheletro" per l'analisi lessicale, a partire dall'UML
+
+## Giorno 6 - 11/08/2023
+Ridefinita la struttura per l'analisi lessicale, l'intuizione a partire da quanto visto a lezione è che Block funge da "ExpressionManager" (per far riferimento a quanto visto a lezione), che è quindi appunto una statement list come definita dalla grammatica.
+A un programma viene assegnato uno e un solo block perché il block può contenerne altri a sua volta ma non posso avere due blocchi distinti, sarebbe come avere due "main"
+Program invece funge da "ParseExpression", e di fatti conterrà l'albero sintattico che verrà poi utilizzato dal visitor.
+Sulla falsa riga di quanto fatto a lezione sono stati definite le classi per gli statement e le espressioni.
+Per le NumExpr è stato riportato 1:1 la parte fatta a lezione, mentre per le BoolExpr si è svolto un lavoro similare (iniziale, terminerà la prossima volta)
+
+Per gestire il caso della classe degli operatori Binari, ho creato due classi figlie, una per i due operatori binari AND e OR e una per l'operatore unario NOT

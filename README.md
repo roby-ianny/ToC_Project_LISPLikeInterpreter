@@ -10,3 +10,4 @@ La libreria Token.h definisce i token per i vari elementi del "linguaggio", ment
 Tokenizer invece si occupa di convertire le parore in ingresso in una sequenza di Token, occupandosi della conversione di numeri e di variabili.
 
 ## Analisi Sintattica
+L'analisi sintattica si occupa di prendere la sequenza di Token, e generare l'albero sintattico. L'albero sintattico verrà poi passato al visitor per l'analisi semantica

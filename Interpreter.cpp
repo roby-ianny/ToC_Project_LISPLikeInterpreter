@@ -7,11 +7,7 @@
 #include "Token.h"
 #include "Tokenizer.h"
 #include "Statement.h"
-#include "StatementManager.h"
-/*
-#include "Parser.h"
-#include "Visitor.h"
-*/
+#include "Program.h"
 
 int main(int argc, char *argv[])
 {
