@@ -1,73 +1,14 @@
 #ifndef STATEMENT_H
 #define STATEMENT_H
 
-class Visitor; //Da definire poi per l'analisi semantica
+#include <string>
+#include "Block.h"
 
-class Statement{
-    public:
-        virtual ~Statement() {};
-};
+//Forward Declaration
+class Visitor; 
+class Block;
 
-class WhileStmt : public Statement {
-    public: 
-        //il costruttore per passaggio di parametro
-        WhileStmt(NumExpr* expression) : nexpr( expression ) {}
-        ~WhileStmt() = default;
-
-        WhileStmt(const WhileStmt& other) = default;
-        WhileStmt& operator=(const WhileStmt& other) = default;
-
-    private:    
-        NumExpr* nexpr;
-};
-
-class SetStmt : public Statement {
-    public: 
-        SetStmt(NumExpr* e, Variable* v) : expr( e ), var( v ) {}
-        ~SetStmt() = default;
-
-        SetStmt(const SetStmt& other) = default;
-        SetStmt& operator=(const SetStmt& other) = default;
-    private:
-        NumExpr* expr;
-        Variable* var;
-};
-
-class InputStmt : public Statement {
-    public: 
-        InputStmt(Variable* v) : var ( v ){}
-        ~InputStmt() = default;
-
-        InputStmt(const InputStmt& other) = default;
-        InputStmt& operator=(const InputStmt& other) = default;
-    private:
-        Variable* var;
-};
-
-class WhileStmt : public Statement {
-    public: 
-        WhileStmt(BoolExpr* expression, Block* bl) : bexpr( expression ), b ( bl ) {}
-        ~WhileStmt() = default;
-
-        WhileStmt(const WhileStmt& other) = default;
-        WhileStmt& operator=(const WhileStmt& other) = default;
-    private:
-        BoolExpr* bexpr;
-        Block* b;
-};
-
-class IfStmt : public Statement {
-    public: 
-        IfStmt(BoolExpr* expression, Block* bl) : bexpr( expression ), b ( bl ) {}
-        ~IfStmt() = default;
-
-        IfStmt(const IfStmt& other) = default;
-        IfStmt& operator=(const IfStmt& other) = default;
-    private:
-        BoolExpr* bexpr;
-        Block* b;
-};
-
+/*Espressioni Booleane e Numeriche*/
 
 class NumExpr{
     public:
@@ -155,17 +96,17 @@ class BoolExpr{
         //virtual void accept(Visitor* v) = 0;
 };
 
-class RelOp : public BoolExpr{
+class BoolConst : public BoolExpr{
     public:
-        enum RelOpCode { LT, GT, EQ};
-        RelOp(RelOpCode o, NumExpr* l, NumExpr* r) : op(o), lo(l), ro(r) {}
+        enum BoolConstCode { LT, GT, EQ};
+        BoolConst(BoolConstCode o, NumExpr* l, NumExpr* r) : op(o), lo(l), ro(r) {}
 
-        ~RelOp() = default;
+        ~BoolConst() = default;
 
-        RelOp(const RelOp& other) = default;
-        RelOp& operator=(const RelOp& other) = default;
+        BoolConst(const BoolConst& other) = default;
+        BoolConst& operator=(const BoolConst& other) = default;
 
-        RelOpCode getOp() const{
+        BoolConstCode getOp() const{
             return op;
         }
 
@@ -178,32 +119,121 @@ class RelOp : public BoolExpr{
         }
 
     private:
-        RelOpCode op;
+        BoolConstCode op;
         NumExpr* lo;
         NumExpr* ro;
 };
 
-class BoolConst : public BoolExpr{
-    private:
-    public:
-};
-
+/*
 class BoolOp : public BoolExpr{
     private:
+        virtual ~BoolExpr(){};
     public:
 };
 
-/* Definisco la classe per gli operatori booleani binari, AND e OR
-class BinaryBoolOp : public BoolOp{
+Siccome ho due operatori booleani binari, e uno unario, utilizzo due  classi 
+distinte invece che usare BoolOp
 
-};
 */
 
-/* Definisco la classe per l'operatore unario NOT
-class NotBoolOp : public BoolOp{
+/* Definisco la classe per gli operatori booleani binari, AND e OR*/
+class BinaryBoolOp : public BoolExpr{
+    private:
+        enum BinBoolOpCode{ AND, OR};
+        BinaryBoolOp(BinBoolOpCode o, BoolExpr* l, BoolExpr* r) : op( o ), lo( l ), ro( r ){}
 
+        ~BinaryBoolOp() = default;
+
+        BinaryBoolOp(const BinaryBoolOp& other) = default;
+        BinaryBoolOp& operator=(const BinaryBoolOp& other) = default;
+    public:
+        BinBoolOpCode op;
+        BoolExpr* lo;
+        BoolExpr* ro;
 };
-*/
 
+
+/* Definisco la classe per l'operatore unario NOT */
+class NotBoolOp : public BoolExpr{
+    public:
+        // enum NotOpCode{ NOT};
+        NotBoolOp(/*NotOpCode o,*/ BoolExpr* e) : /*op( o ),*/ expr( e ) {}
+
+        ~NotBoolOp() = default;
+
+        NotBoolOp(const NotBoolOp& other) = default;
+        NotBoolOp& operator=(const NotBoolOp& other) = default;
+    private:
+        //NotOpCode op;
+        BoolExpr* expr;
+    
+};
+
+class Statement{
+    public:
+        virtual ~Statement() {};
+        virtual void accept(Visitor* v) = 0;
+};
+
+
+class SetStmt : public Statement {
+    public: 
+        SetStmt(NumExpr* e, Variable* v) : expr( e ), var( v ) {}
+        ~SetStmt() = default;
+
+        SetStmt(const SetStmt& other) = default;
+        SetStmt& operator=(const SetStmt& other) = default;
+    private:
+        NumExpr* expr;
+        Variable* var;
+};
+
+class PrintStmt : public Statement {
+    public:
+        PrintStmt(NumExpr* expr) : e( expr ) {}
+        
+        ~PrintStmt() = default;
+        PrintStmt(const PrintStmt& other) = default;
+        PrintStmt& operator=(const PrintStmt& other) = default;
+
+    private:
+        NumExpr* e;
+};
+
+class InputStmt : public Statement {
+    public: 
+        InputStmt(Variable* v) : var ( v ){}
+        ~InputStmt() = default;
+
+        InputStmt(const InputStmt& other) = default;
+        InputStmt& operator=(const InputStmt& other) = default;
+    private:
+        Variable* var;
+};
+
+class IfStmt : public Statement {
+    public: 
+        IfStmt(BoolExpr* expression, Block* bl) : bexpr( expression ), b( bl ) {}
+        ~IfStmt() = default;
+
+        IfStmt(const IfStmt& other) = default;
+        IfStmt& operator=(const IfStmt& other) = default;
+    private:
+        BoolExpr* bexpr;
+        Block* b;
+};
+
+
+class WhileStmt : public Statement {
+    public: 
+        WhileStmt(BoolExpr* expression, Block* bl) : bexpr( expression ), b ( bl ) {}
+        ~WhileStmt() = default;
+
+        WhileStmt(const WhileStmt& other) = default;
+        WhileStmt& operator=(const WhileStmt& other) = default;
+    private:
+        BoolExpr* bexpr;
+        Block* b;
+};
 
 #endif

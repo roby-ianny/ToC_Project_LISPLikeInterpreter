@@ -1,22 +1,34 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include <vector>
 #include "Statement.h"
+#include <vector>
+
+class Statement;
 
 class Block{
-    void clearMemory(){
-        auto i = allocated.begin();
-        for (; i != allocated.end(); ++i)
-        {
-            // *i è l'elemento (nel vettore di Statement) puntato dall'iteratore
-            delete(*i);
+    public:
+        Block() = default;
+        ~Block(){
+            clearMemory();
         }
-        
-    }
+
+        //elimino costruttori di copia e assegnamento
+        Block(const Block& other) = delete;
+        Block& operator=(const Block& other) = delete;
+
+        /*Factory Method per generare gli oggetti*/
+
+        void clearMemory(){
+            auto i = allocated.begin();
+            for(; i != allocated.end(); ++i){
+                delete(*i);
+            }
+            allocated.resize(0);
+        }
 
     private:
-        std::vector<Statement> allocated;
+        std::vector<Statement*> allocated;
 };
 
 #endif
