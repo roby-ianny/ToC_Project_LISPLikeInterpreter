@@ -23,6 +23,7 @@ class Block{
             auto i = allocated.begin();
             for(; i != allocated.end(); ++i){
                 delete(*i);
+                //NB: Così non vengono deallocati elementi come NumExpr, BoolExpr, Variabili...
             }
             allocated.resize(0);
         }
