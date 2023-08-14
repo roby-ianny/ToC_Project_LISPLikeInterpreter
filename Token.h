@@ -17,6 +17,8 @@
 // - ID è un identificatovo attribuito al Token
 // - parola è la stringa corrispondente al Token
 
+//TEST
+
 struct Token
 {
     // usiamo come identificativi univoci delle constexpr che assegnano un numero costante a un certo valore
