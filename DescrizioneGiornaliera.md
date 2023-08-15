@@ -58,3 +58,7 @@ Sulla falsa riga di quanto fatto a lezione sono stati definite le classi per gli
 Per le NumExpr è stato riportato 1:1 la parte fatta a lezione, mentre per le BoolExpr si è svolto un lavoro similare (iniziale, terminerà la prossima volta)
 
 Per gestire il caso della classe degli operatori Binari, ho creato due classi figlie, una per i due operatori binari AND e OR e una per l'operatore unario NOT
+
+## Giorno 7 - 13/08/2023
+Completata al definizione di Statement.h e terminata la definizione inziale di Block.h e Program.h
+TODO: sistemare Block.h 
