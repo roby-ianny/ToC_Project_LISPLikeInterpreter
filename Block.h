@@ -1,10 +1,14 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include "Statement.h"
 #include <vector>
+#include "Statement.h"
+#include "Expressions.h"
 
-class Statement;
+class Statement;//Forward declaration per evitare problemi di dipendenza cicliche
+class SetStmt;
+class WhilStmt;
+
 
 class Block{
     public:
@@ -18,6 +22,17 @@ class Block{
         Block& operator=(const Block& other) = delete;
 
         /*Factory Method per generare gli oggetti*/
+        Statement* makeSet(NumExpr* e, Variable* v){
+            Statement* s = new SetStmt(e, v);
+            allocated.push_back(s);
+            return s;
+        }
+
+        Statement* makeWhile(BoolExpr* e, Block* b){
+            Statement* s = new WhileStmt(e, b);
+            allocated.push_back(s);
+            return s;
+        }
 
         void clearMemory(){
             auto i = allocated.begin();

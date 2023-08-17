@@ -14,4 +14,4 @@ L'analisi sintattica si occupa di prendere la sequenza di Token, e generare l'al
 Program è la classe che si occupa di effettuare il parsing tramite il metodo RecursiveParse. Esso contiene un istanza della classe "Block", che indica il blocco principale, similarmente al "main" in C++. Block può essere composto da ulteriori sotto-blocchi, ma il principale è uno ed uno soltanto.
 Block è appunto la classe che indica il blocco, che, come definito dalla CFG, contiene una lista di statement e/o altri blocchi, a loro volta strutturati in questo modo.
 Per il parsing si utilizza il pattern del FactoryMethod, quindi il parser legge una sequenza di token, e, in base a quale statement/espressione coincidono, vengono costruiti uno o più elementi della classe "Statement". 
-Alla fine il Block associato alla classe ParseExpression
+Alla fine il Block associato alla classe ParseExpression conterrà un vector di statement, che verranno poi letti ed eseguiti invece dal visitor.
