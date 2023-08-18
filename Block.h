@@ -5,10 +5,7 @@
 #include "Statement.h"
 #include "Expressions.h"
 
-class Statement;//Forward declaration per evitare problemi di dipendenza cicliche
-class SetStmt;
-class WhilStmt;
-
+class Statement; //Forward declaration
 
 class Block{
     public:
@@ -21,19 +18,6 @@ class Block{
         Block(const Block& other) = delete;
         Block& operator=(const Block& other) = delete;
 
-        /*Factory Method per generare gli oggetti*/
-        Statement* makeSet(NumExpr* e, Variable* v){
-            Statement* s = new SetStmt(e, v);
-            allocated.push_back(s);
-            return s;
-        }
-
-        Statement* makeWhile(BoolExpr* e, Block* b){
-            Statement* s = new WhileStmt(e, b);
-            allocated.push_back(s);
-            return s;
-        }
-
         void clearMemory(){
             auto i = allocated.begin();
             for(; i != allocated.end(); ++i){
@@ -41,6 +25,11 @@ class Block{
                 //NB: Così non vengono deallocati elementi come NumExpr, BoolExpr, Variabili...
             }
             allocated.resize(0);
+        }
+
+        // Definisco questo metodo da utilizzare nel parser, questo perché evito dipendenze cicliche in questo modo
+        void push_back(Statement* s){
+            allocated.push_back(s);
         }
 
     private:

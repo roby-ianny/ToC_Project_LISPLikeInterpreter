@@ -15,3 +15,12 @@ Program è la classe che si occupa di effettuare il parsing tramite il metodo Re
 Block è appunto la classe che indica il blocco, che, come definito dalla CFG, contiene una lista di statement e/o altri blocchi, a loro volta strutturati in questo modo.
 Per il parsing si utilizza il pattern del FactoryMethod, quindi il parser legge una sequenza di token, e, in base a quale statement/espressione coincidono, vengono costruiti uno o più elementi della classe "Statement". 
 Alla fine il Block associato alla classe ParseExpression conterrà un vector di statement, che verranno poi letti ed eseguiti invece dal visitor.
+
+# TODO
+[] Parser
+[] Visitor
+[] Gestore delle variabili allocate
+[] Distruttore per le NumExpr e BoolExpr
+    - che altrimenti non vengono rimossti correttamente dal metodo clearMemory
+[] Parser specifico per le espressioni numeriche
+[] Parser specifico per le espressioni booleane 

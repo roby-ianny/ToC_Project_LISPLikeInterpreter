@@ -65,6 +65,8 @@ class Number : public NumExpr{
 class Variable : public NumExpr{
     public:
         Variable( std::string n, int v ) : name( n ), value( v ) {}
+        //aggiungo un costruttore con solo id e imposto a 0 il valore iniziale della variabile
+        Variable( std::string id) : name{ id }, value{ 0 } {};
         ~Variable() = default;
 
         Variable(const Variable& other) = default;

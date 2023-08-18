@@ -62,3 +62,14 @@ Per gestire il caso della classe degli operatori Binari, ho creato due classi fi
 ## Giorno 7 - 13/08/2023
 Completata al definizione di Statement.h e terminata la definizione inziale di Block.h e Program.h
 TODO: sistemare Block.h 
+
+## Giorno 8 - 18/08/2023
+Risolto un problema del factory method per gli statement, è stato inserito all'interno della classe program, questo perché in Block e in Statement è necessaria una forward declaration "doppia". Questo perché Block è un vettore di Statement mentre alcuni Statement possono contenere dei blocchi a loro volta.
+
+Un alternativa potrebbe essere quellad i utilizzare delle friend functions, il che potrebbe essere preso in considerazione in un secondo momento.
+
+Bisogna ora prendere in considerazione un modo per generare elementi del tipo BoolExpr e NumExpr.
+In questo caso è preferibile utilizzare delle friend functions, ma la cosa rimane indifferente.
+
+Iniziato ad impostare i comportamenti del parser.
+

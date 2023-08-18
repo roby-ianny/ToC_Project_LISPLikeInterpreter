@@ -37,16 +37,41 @@ int main(int argc, char *argv[])
     Tokenizer tokenize;
     std::vector<Token> inputTokens;
 
-    inputTokens = std::move(tokenize(inputFile));
+    try
+    {
+        inputTokens = std::move(tokenize(inputFile));
+        inputFile.close();  //dopo aver ottenuto la token sequence il file non è più necessario
+    }
+    catch(LexicalError& le)
+    {
+        std::cerr << "Errore in fase di analisi lessicale" << std::endl;
+        std::cerr << le.what() << '\n';
+        return EXIT_FAILURE;
+    }
+    catch(std::exception& exc){
+        std::cerr << "Impossibile leggere dal file: " << argv[1] << std::endl;
+        std::cerr << exc.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 
+    // Stampa dei tokens
     for(Token t : inputTokens){
         std::cout << t << std::endl;
     }
 
     /*Fase 2 - Parsing
-    File interessati:     */
+    File interessati: Expression.h, Expression.cpp, Statement.h, Statement.cpp, Program.h, Program.cpp interessati*/
+    Block main_block;
+    Program parse{ main_block };
 
-
-    /*Chiudo il file*/
-    inputFile.close();
+    /*
+    try
+    {
+        Block b = parse(inputTokens);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    */   
 }
