@@ -53,27 +53,28 @@ class InputStmt : public Statement {
 
 class IfStmt : public Statement {
     public: 
-        IfStmt(BoolExpr* expression, Block* bl) : bexpr( expression ), b( bl ) {}
+        IfStmt(BoolExpr* expression, Statement* t, Statement* f) : bexpr( expression ), true_case( t ), false_case(f) {}
         ~IfStmt() = default;
 
         IfStmt(const IfStmt& other) = default;
         IfStmt& operator=(const IfStmt& other) = default;
     private:
         BoolExpr* bexpr;
-        Block* b;
+        Statement* true_case;
+        Statement* false_case;
 };
 
 
 class WhileStmt : public Statement {
     public: 
-        WhileStmt(BoolExpr* expression, Block* bl) : bexpr( expression ), b ( bl ) {}
+        WhileStmt(BoolExpr* expression, Statement* bl) : bexpr( expression ), b ( bl ) {}
         ~WhileStmt() = default;
 
         WhileStmt(const WhileStmt& other) = default;
         WhileStmt& operator=(const WhileStmt& other) = default;
     private:
         BoolExpr* bexpr;
-        Block* b;
+        Statement* b;
 };
 
 #endif

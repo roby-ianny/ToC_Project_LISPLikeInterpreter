@@ -22,5 +22,5 @@ Alla fine il Block associato alla classe ParseExpression conterrà un vector di 
 [] Gestore delle variabili allocate
 [] Distruttore per le NumExpr e BoolExpr
     - che altrimenti non vengono rimossti correttamente dal metodo clearMemory
-[] Parser specifico per le espressioni numeriche
-[] Parser specifico per le espressioni booleane 
+[X] Parser specifico per le espressioni numeriche
+[X] Parser specifico per le espressioni booleane 

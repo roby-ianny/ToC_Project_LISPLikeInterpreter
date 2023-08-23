@@ -46,10 +46,11 @@ NumExpr* Program:: parseNumExpr(std::vector<Token>::const_iterator& itr){
     } else if (itr->tag == Token::VAR)
     {
         // return new Variable(itr->word);          ancora da implementare correttamente un gestore dellev variabili
-    } else {
-        throw ParseError("Unexpected Token");
-        return nullptr;
     }
+
+    //nel caso non fossi in nessuno di questi casi allora vi è un errore
+    throw ParseError("Unexpected Token");
+    return nullptr;
 }
 
 //Parse per le espressioni booleani
@@ -118,7 +119,6 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
             safe_next(itr);
             if (itr->tag == Token::RP) return new BinaryBoolOp(op, lo, ro);
             else throw ParseError("Unexpected token");
-
             break;
         }
         case Token::NOT :
@@ -147,38 +147,87 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
 }
 
 //Parser a discesa ricorsiva
-Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr)
-{
-    /*
-    //Uno statement inizia con una parentesi aperta e termina con una parentesi chiusa
-    if (itr->tag == Token::LP) {    //Partiamo dal fatto che ogni statement inizia con una parentesi aperta
-        Devo analizzare una grammatica non ambigua, allora il parsing si effettua in maniera monodirezionale, a differenza di quanto
-        visto con il parser di YetAnotherInterpreter, in questo caso allora si avrà comunque un parser ricorsivo, ma strutturato in modo diverso.
-        Il risultato finale deve essere una sequenza si statements, se abbiamo uno statement che ne contiene altri, in questo caso appariranno prima quelli più interni
-        fino ad arrivare a quello più esterno, per poi passare allo statement successivo
-        safe_next(itr);                 //passo all'elemenento successivo della token stream
-        if (itr->tag == Token::LP)      //Se incontro un'altra parentesi vuol dire che vi sono degli statement "interni"
-        {
-            recursiveParse(itr);        //Allora come detto inizialmente, bisogna generare prima gli statement più interni
-        }
-        // verifico la presenza di una parola chiave
+Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
+    if (itr->tag == Token::LP)
+    {
+        safe_next(itr);
         switch (itr->tag)
         {
+        case Token::BLOCK :
+        {
+            std::cout << "entering block" << std::endl;
+            safe_next(itr);
+            recursiveParse(itr);
+            safe_next(itr);
+            if (itr->tag == Token::RP)          //sono arrivato alla fine del blocco di istruzioni
+            {
+                std::cout << "exiting block" << std::endl;
+                break;
+            }
+            else recursiveParse(itr);           //se non sono arrivato in fondo eseguo il parsing degli altri statement
+        }
         case Token::SET :
+        {
             safe_next(itr);
-            if (itr->tag == Token::VAR)
-        {}}         
+            if (itr->tag == Token::VAR){
+                /*NB implementare il gestore delle variabili*/
+                Variable* var = new Variable(itr->word);
+                safe_next(itr);
+                NumExpr* ex = parseNumExpr(itr);
+                safe_next(itr);
+                if (itr->tag == Token::RP) return makeSet(ex, var);
+                else throw ParseError("Mismatched Parenthesis");
+            }else throw ParseError("SET statement, expected variable token");
             break;
+        }
         case Token::PRINT :
+        {
             safe_next(itr);
-            switch (itr->tag);
-            //chiamare anche qui il parser specifico per le espressioni numeriche
-            //TODO: implementare un gestore delle variabil
-            NumExpr* nexpr = parseNumExpr (itr); 
-        
+            NumExpr* ex = parseNumExpr(itr);
+            safe_next(itr);
+            if (itr->tag == Token::RP) makePrint(ex);
+            else throw ParseError("Mismatched Parenthesis"); 
+        }
+        case Token::INPUT :
+        {
+            safe_next(itr);
+            if (itr->tag == Token::VAR) {
+                Variable* v = new Variable(itr->word);
+                safe_next(itr);
+                if (itr->tag == Token::RP) return makeInput(v) ;
+                else throw ParseError("Mismatched Parenthesis") ;          
+            } else throw ParseError("INPUT statement, expected variable token");
+        }
+        case Token::IF :
+        {
+            safe_next(itr);
+            BoolExpr* expr = parseBoolExpr(itr);
+            safe_next(itr);
+            Statement* tr = recursiveParse(itr);
+            safe_next(itr);
+            Statement* fls = recursiveParse(itr);
+            if(itr->tag == Token::RP) return makeIf(expr, tr, fls);
+            else throw ParseError("Mismatched Parenthesis");
+        }
+        case Token::WHILE :
+        {
+            safe_next(itr);
+            BoolExpr* expr = parseBoolExpr(itr);
+            safe_next(itr);
+            Statement* bl = recursiveParse(itr);
+            safe_next(itr);
+            if(itr->tag == Token::RP) return makeWhile(expr, bl);
+            else throw ParseError("Mismatched Parenthesis");
+        }
         default:
+            throw ParseError("Invalid Token");
+            return nullptr;
             break;
-        }        
+        }
     }
-    */
+    else {
+        throw ParseError("Mismatched Parenthesis");
+        return nullptr;
+    }
+    
 }
