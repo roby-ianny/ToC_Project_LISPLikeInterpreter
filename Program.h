@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "Exceptions.h"
 #include "Token.h"
@@ -27,30 +28,35 @@ class Program{
         Statement* makeSet(NumExpr* e, Variable* v){
             Statement* s = new SetStmt(e, v);
             mb.push_back(s);
+            
             return s;
         }
 
         Statement* makePrint(NumExpr* exp){
             Statement* s = new PrintStmt(exp);
             mb.push_back(s);
+            std::cout << "Made print statement" << std::endl;
             return s;
         }
 
         Statement* makeInput(Variable* v){
             Statement* s = new InputStmt(v);
             mb.push_back(s);
+            std::cout << "Made input statement" << std::endl;
             return s;
         }
 
-        Statement* makeIf(BoolExpr* exp, Block* b){
-            Statement* s = new IfStmt(exp, b);
+        Statement* makeIf(BoolExpr* exp, Statement* t, Statement* f){
+            Statement* s = new IfStmt(exp, t, f );
             mb.push_back(s);
+            std::cout << "Made if statement" << std::endl;
             return s;
         }
 
-        Statement* makeWhile(BoolExpr* e, Block* b){
+        Statement* makeWhile(BoolExpr* e, Statement* b){
             Statement* s = new WhileStmt(e, b);
             mb.push_back(s);
+            std::cout << "Made while statement" << std::endl;
             return s;
         }
 

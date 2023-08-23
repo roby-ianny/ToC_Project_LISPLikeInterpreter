@@ -73,3 +73,7 @@ In questo caso è preferibile utilizzare delle friend functions, ma la cosa rima
 
 Iniziato ad impostare i comportamenti del parser.
 
+## Giorno 9 - 23/07/2023
+Implementazione iniziale dei parser delle espressioni Booleane e delle espressioni aritmetiche, prendere nota del fatto che non vi è ancora un gestore delle variabili allocate, ma questo andrà gestito a livello di visitor, ed evenutalmente aggiunto in seguito anche a livello di parsing per ottimizzare le risorse allocate (?).
+
+È stato anche scritto una versione iniziale del parser "principale", il programma compila correttamente e termina senza entrare in loop
