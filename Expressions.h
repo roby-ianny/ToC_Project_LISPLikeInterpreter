@@ -95,15 +95,31 @@ class BoolExpr{
 
 class BoolConst : public BoolExpr{
     public:
-        enum BoolConstCode { LT, GT, EQ};
-        BoolConst(BoolConstCode o, NumExpr* l, NumExpr* r) : op(o), lo(l), ro(r) {}
-
+        enum BoolConstValue { TRUE, FALSE};
+        BoolConst(BoolConstValue v) : value( v ) {};
         ~BoolConst() = default;
 
         BoolConst(const BoolConst& other) = default;
         BoolConst& operator=(const BoolConst& other) = default;
 
-        BoolConstCode getOp() const{
+        BoolConstValue getValue() const{
+            return value;
+        }
+
+    private:
+        BoolConstValue value;
+};
+
+class RelOp : public BoolExpr{
+    public:
+        enum RelOpCode { LT, GT, EQ};
+        RelOp(RelOpCode o, NumExpr* l, NumExpr* r) : op(o), lo(l), ro(r) {}
+        ~RelOp() = default;
+
+        RelOp(const RelOp& other) = default;
+        RelOp& operator=(const RelOp& other) = default;
+
+        RelOpCode getOp() const{
             return op;
         }
 
@@ -116,7 +132,7 @@ class BoolConst : public BoolExpr{
         }
 
     private:
-        BoolConstCode op;
+        RelOpCode op;
         NumExpr* lo;
         NumExpr* ro;
 };
@@ -135,7 +151,7 @@ distinte invece che usare BoolOp
 
 /* Definisco la classe per gli operatori booleani binari, AND e OR*/
 class BinaryBoolOp : public BoolExpr{
-    private:
+    public:
         enum BinBoolOpCode{ AND, OR};
         BinaryBoolOp(BinBoolOpCode o, BoolExpr* l, BoolExpr* r) : op( o ), lo( l ), ro( r ){}
 
@@ -143,7 +159,7 @@ class BinaryBoolOp : public BoolExpr{
 
         BinaryBoolOp(const BinaryBoolOp& other) = default;
         BinaryBoolOp& operator=(const BinaryBoolOp& other) = default;
-    public:
+    private:
         BinBoolOpCode op;
         BoolExpr* lo;
         BoolExpr* ro;
