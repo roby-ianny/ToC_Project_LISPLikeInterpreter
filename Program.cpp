@@ -195,18 +195,31 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
                     return makeSet(ex, var);
                     break;
                 }
-                else throw ParseError("Mismatched Parenthesis");
-            }else throw ParseError("SET statement, expected variable token");
-            
+                else {
+                    throw ParseError("Mismatched Parenthesis");
+                    return nullptr;
+                    break;
+                }
+                }else {
+                    throw ParseError("SET statement, expected variable token");
+                    return nullptr;
+                    break;
+                } 
         }
         case Token::PRINT :
         {
             safe_next(itr);
             NumExpr* ex = parseNumExpr(itr);
             safe_next(itr);
-            if (itr->tag == Token::RP) makePrint(ex);
-            else throw ParseError("Mismatched Parenthesis"); 
-            break;
+            if (itr->tag == Token::RP){
+                return makePrint(ex);
+                break;
+            }
+            else {
+                throw ParseError("Mismatched Parenthesis"); 
+                return nullptr;
+                break;
+            }
         }
         case Token::INPUT :
         {
@@ -214,11 +227,19 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             if (itr->tag == Token::VAR) {
                 Variable* v = new Variable(itr->word);
                 safe_next(itr);
-                if (itr->tag == Token::RP) return makeInput(v) ;
-                else throw ParseError("Mismatched Parenthesis") ;          
-            } else throw ParseError("INPUT statement, expected variable token");
-            break;
-        }
+                if (itr->tag == Token::RP) {
+                    return makeInput(v) ;
+                    break;
+                }
+                else {
+                    throw ParseError("Mismatched Parenthesis") ;        
+                    break;  
+                }
+            } else {
+                throw ParseError("INPUT statement, expected variable token");
+                break;
+            }
+        }   
         case Token::IF :
         {
             safe_next(itr);
