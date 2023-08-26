@@ -148,33 +148,40 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
 }
 
 
-Block* Program::parseBlock(std::vector<Token>::const_iterator& itr){
-/*DA DEFINIRE*/
+void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
+    if (itr->tag == Token::LP)
+    {
+        safe_next(itr);
+        if (itr->tag == Token::BLOCK)
+        {
+            safe_next(itr);
+            while (itr->tag != Token::RP);
+            {
+                if (itr->tag == Token::LP)
+                {
+                    b->push_back(recursiveParse(itr));
+                    safe_next(itr);
+                } else {
+                    throw ParseError("Unexpected Token in BLOCK");
+                }            
+            }
+        }
+        else {
+            b->push_back(recursiveParse(itr)); 
+        }
+        
+    }
+    
 }
 
 
 //Parser a discesa ricorsiva
 Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
-    if (itr->tag == Token::LP)
+    /*if (itr->tag == Token::LP)
     {
-        safe_next(itr);
+        safe_next(itr);*/
         switch (itr->tag)
         {
-        /*
-        case Token::BLOCK :
-        {
-            std::cout << "entering block" << std::endl;
-            safe_next(itr);
-            recursiveParse(itr);
-            safe_next(itr);
-            if (itr->tag == Token::RP)          //sono arrivato alla fine del blocco di istruzioni
-            {
-                std::cout << "exiting block" << std::endl;
-                break;
-            }
-            else recursiveParse(itr);           //se non sono arrivato in fondo eseguo il parsing degli altri statement
-        }
-        */
         case Token::SET :
         {
             safe_next(itr);
@@ -184,10 +191,13 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
                 safe_next(itr);
                 NumExpr* ex = parseNumExpr(itr);
                 safe_next(itr);
-                if (itr->tag == Token::RP) return makeSet(ex, var);
+                if (itr->tag == Token::RP){
+                    return makeSet(ex, var);
+                    break;
+                }
                 else throw ParseError("Mismatched Parenthesis");
             }else throw ParseError("SET statement, expected variable token");
-            break;
+            
         }
         case Token::PRINT :
         {
@@ -196,6 +206,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             if (itr->tag == Token::RP) makePrint(ex);
             else throw ParseError("Mismatched Parenthesis"); 
+            break;
         }
         case Token::INPUT :
         {
@@ -206,37 +217,43 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
                 if (itr->tag == Token::RP) return makeInput(v) ;
                 else throw ParseError("Mismatched Parenthesis") ;          
             } else throw ParseError("INPUT statement, expected variable token");
+            break;
         }
         case Token::IF :
         {
             safe_next(itr);
             BoolExpr* expr = parseBoolExpr(itr);
             safe_next(itr);
-            Block* tr = parseBlock(itr);
+            Block* tr = new Block();
+            parseBlock(itr, tr);
             safe_next(itr);
-            Block* fls = parseBlock(itr);
+            Block* fls = new Block();
+            parseBlock(itr, fls);
             if(itr->tag == Token::RP) return makeIf(expr, tr, fls);
             else throw ParseError("Mismatched Parenthesis");
+            break;
         }
         case Token::WHILE :
         {
             safe_next(itr);
             BoolExpr* expr = parseBoolExpr(itr);
             safe_next(itr);
-            Block* bl = parseBlock(itr);
+            Block* bl;
+            parseBlock(itr, bl);
             safe_next(itr);
             if(itr->tag == Token::RP) return makeWhile(expr, bl);
             else throw ParseError("Mismatched Parenthesis");
+            break;
         }
         default:
             throw ParseError("Invalid Token");
             return nullptr;
             break;
         }
-    }
+    /*}
     else {
         throw ParseError("Mismatched Parenthesis");
         return nullptr;
     }
-    
+    */
 }

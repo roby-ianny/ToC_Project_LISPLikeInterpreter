@@ -10,7 +10,10 @@ class Statement; //Forward declaration
 
 class Block{
     public:
-        Block() = default;
+        Block() {
+            std::vector<Statement*> st;     //creo un vector vuoto
+            allocated = st;                 //allocated lo pongo uguale al vector vuoto
+        }
         ~Block(){
             clearMemory();
         }

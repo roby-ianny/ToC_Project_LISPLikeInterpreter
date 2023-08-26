@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
         //PrintVisitor p = new PrintVisitor();
         //std::cout << "L'espressione letta è ";
     } catch (ParseError& pe){
-        std::cerr << "Errore in parsing" << std::endl;
+        std::cerr << "Errore in parsing: ";
         std::cerr << pe.what() << std::endl ;
     } /*catch(std::exception& exc) {
         std::cerr << exc.what() << std::endl;

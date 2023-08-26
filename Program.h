@@ -20,8 +20,9 @@ class Program{
         Block* operator()(const std::vector<Token>& TokenStream){
             auto tokenItr = TokenStream.begin();
             streamEnd = TokenStream.end();
-            Block* main = parseBlock(tokenItr);
-            return main;
+            Block* bl = &mb;
+            parseBlock(tokenItr, bl);
+            return bl;
         }
 
         /*Factory Method per generare gli oggetti*/
@@ -67,7 +68,7 @@ class Program{
         //Block è l'equivalente dell'expression manager
         Block& mb;
 
-        Block* parseBlock(std::vector<Token>::const_iterator& itr);                      //parser del blocco che serve per restituire l'albero sintattico
+        void parseBlock(std::vector<Token>::const_iterator& itr, Block* b);             //parser del blocco che serve per restituire l'albero sintattico
 
         Statement* recursiveParse(std::vector<Token>::const_iterator& itr);             //parser degli statements
 
