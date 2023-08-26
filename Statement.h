@@ -19,7 +19,10 @@ class Statement{
 class SetStmt : public Statement {
     public: 
         SetStmt(NumExpr* e, Variable* v) : expr( e ), var( v ) {}
-        ~SetStmt() = default;
+        ~SetStmt(){
+            delete(expr);
+            delete(var);
+        }
 
         SetStmt(const SetStmt& other) = default;
         SetStmt& operator=(const SetStmt& other) = default;
@@ -32,7 +35,9 @@ class PrintStmt : public Statement {
     public:
         PrintStmt(NumExpr* expr) : e( expr ) {}
         
-        ~PrintStmt() = default;
+        ~PrintStmt(){
+            delete(e);
+        }
         PrintStmt(const PrintStmt& other) = default;
         PrintStmt& operator=(const PrintStmt& other) = default;
 
@@ -43,7 +48,9 @@ class PrintStmt : public Statement {
 class InputStmt : public Statement {
     public: 
         InputStmt(Variable* v) : var ( v ){}
-        ~InputStmt() = default;
+        ~InputStmt(){
+            delete(var);
+        }
 
         InputStmt(const InputStmt& other) = default;
         InputStmt& operator=(const InputStmt& other) = default;
@@ -54,7 +61,11 @@ class InputStmt : public Statement {
 class IfStmt : public Statement {
     public: 
         IfStmt(BoolExpr* expression, Block* t, Block* f) : bexpr( expression ), true_case( t ), false_case(f) {}
-        ~IfStmt() = default;
+        ~IfStmt(){
+            delete(bexpr);
+            delete(true_case);
+            delete(false_case);
+        }
 
         IfStmt(const IfStmt& other) = default;
         IfStmt& operator=(const IfStmt& other) = default;
@@ -68,7 +79,10 @@ class IfStmt : public Statement {
 class WhileStmt : public Statement {
     public: 
         WhileStmt(BoolExpr* expression, Block* bl) : bexpr( expression ), b ( bl ) {}
-        ~WhileStmt() = default;
+        ~WhileStmt(){
+            delete(bexpr);
+            delete(b);
+        }
 
         WhileStmt(const WhileStmt& other) = default;
         WhileStmt& operator=(const WhileStmt& other) = default;
