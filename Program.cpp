@@ -1,13 +1,14 @@
 #include <sstream>
 #include <string>
-
-#include "Program.h"
-#include "Token.h"
 #include "Exceptions.h"
-#include <string>
+#include "Expressions.h"
+#include "Statement.h"
+#include "Block.h"
+#include "Program.h"
+
 
 //Parser per le espressioni numeriche
-NumExpr* Program:: parseNumExpr(std::vector<Token>::const_iterator& itr){
+NumExpr* Program::parseNumExpr(std::vector<Token>::const_iterator& itr){
     // Caso in cui ci fosse una num_expr con operatore
     if (itr->tag == Token::LP)
     {
@@ -146,6 +147,12 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
        
 }
 
+
+Block* Program::parseBlock(std::vector<Token>::const_iterator& itr){
+/*DA DEFINIRE*/
+}
+
+
 //Parser a discesa ricorsiva
 Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
     if (itr->tag == Token::LP)
@@ -153,6 +160,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
         safe_next(itr);
         switch (itr->tag)
         {
+        /*
         case Token::BLOCK :
         {
             std::cout << "entering block" << std::endl;
@@ -166,6 +174,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             }
             else recursiveParse(itr);           //se non sono arrivato in fondo eseguo il parsing degli altri statement
         }
+        */
         case Token::SET :
         {
             safe_next(itr);
@@ -203,9 +212,9 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             BoolExpr* expr = parseBoolExpr(itr);
             safe_next(itr);
-            Statement* tr = recursiveParse(itr);
+            Block* tr = parseBlock(itr);
             safe_next(itr);
-            Statement* fls = recursiveParse(itr);
+            Block* fls = parseBlock(itr);
             if(itr->tag == Token::RP) return makeIf(expr, tr, fls);
             else throw ParseError("Mismatched Parenthesis");
         }
@@ -214,7 +223,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             BoolExpr* expr = parseBoolExpr(itr);
             safe_next(itr);
-            Statement* bl = recursiveParse(itr);
+            Block* bl = parseBlock(itr);
             safe_next(itr);
             if(itr->tag == Token::RP) return makeWhile(expr, bl);
             else throw ParseError("Mismatched Parenthesis");

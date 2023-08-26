@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     Program parse{ main_bl };
 
     try {
-        Statement* st = parse(inputTokens);
+        Block* main = parse(inputTokens);
         std::cout << "Parsing terminato" << std::endl;
         //PrintVisitor p = new PrintVisitor();
         //std::cout << "L'espressione letta è ";

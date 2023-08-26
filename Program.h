@@ -16,46 +16,46 @@ class Program{
     public:
         Program(Block& b) : mb{ b } {};
 
-        /*Factory method per gli statement*/
-        Statement* operator()(const std::vector<Token>& TokenStream){
+        /*Factory method per l'albero sintattico*/
+        Block* operator()(const std::vector<Token>& TokenStream){
             auto tokenItr = TokenStream.begin();
             streamEnd = TokenStream.end();
-            Statement* stmt = recursiveParse(tokenItr);
-            return stmt;
+            Block* main = parseBlock(tokenItr);
+            return main;
         }
 
         /*Factory Method per generare gli oggetti*/
         Statement* makeSet(NumExpr* e, Variable* v){
             Statement* s = new SetStmt(e, v);
-            mb.push_back(s);
-            
+            // push_back(s);
+            std::cout << "Made set statement" << std::endl;
             return s;
         }
 
         Statement* makePrint(NumExpr* exp){
             Statement* s = new PrintStmt(exp);
-            mb.push_back(s);
+            // push_back(s);
             std::cout << "Made print statement" << std::endl;
             return s;
         }
 
         Statement* makeInput(Variable* v){
             Statement* s = new InputStmt(v);
-            mb.push_back(s);
+            // push_back(s);
             std::cout << "Made input statement" << std::endl;
             return s;
         }
 
-        Statement* makeIf(BoolExpr* exp, Statement* t, Statement* f){
+        Statement* makeIf(BoolExpr* exp, Block* t, Block* f){
             Statement* s = new IfStmt(exp, t, f );
-            mb.push_back(s);
+            // push_back(s);
             std::cout << "Made if statement" << std::endl;
             return s;
         }
 
-        Statement* makeWhile(BoolExpr* e, Statement* b){
+        Statement* makeWhile(BoolExpr* e, Block* b){
             Statement* s = new WhileStmt(e, b);
-            mb.push_back(s);
+            // push_back(s);
             std::cout << "Made while statement" << std::endl;
             return s;
         }
@@ -66,7 +66,9 @@ class Program{
 
         //Block è l'equivalente dell'expression manager
         Block& mb;
-        
+
+        Block* parseBlock(std::vector<Token>::const_iterator& itr);                      //parser del blocco che serve per restituire l'albero sintattico
+
         Statement* recursiveParse(std::vector<Token>::const_iterator& itr);             //parser degli statements
 
         NumExpr* parseNumExpr(std::vector<Token>::const_iterator& itr);                 //parser espressioni numeriche

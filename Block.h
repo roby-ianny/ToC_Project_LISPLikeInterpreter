@@ -2,8 +2,9 @@
 #define BLOCK_H
 
 #include <vector>
-#include "Statement.h"
 #include "Expressions.h"
+#include "Statement.h"
+#include "Block.h"
 
 class Statement; //Forward declaration
 

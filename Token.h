@@ -46,7 +46,7 @@ struct Token
     static constexpr int BLOCK  = 21;
     /*DA IMPLEMENTARE BLOCK!!!*/
 
-    static constexpr char* id2word[]{   //Vettore per passare dal termine in input al token corrispondente
+    static constexpr const char* id2word[]{   //Vettore per passare dal termine in input al token corrispondente (NB, const è necessario)
         "SET", "PRINT", "INPUT", "IF", "WHILE", "ADD", "SUB", "MUL", "DIV",
         "GT", "LT", "EQ", "AND", "OR", "NOT", "TRUE", "FALSE", "LP", "RP", "NUM", "VAR", "BLOCK"
     };
