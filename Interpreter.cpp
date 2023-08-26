@@ -7,6 +7,7 @@
 #include "Token.h"
 #include "Tokenizer.h"
 #include "Statement.h"
+#include "Block.h"
 #include "Program.h"
 
 int main(int argc, char *argv[])
