@@ -39,18 +39,18 @@ NumExpr* Program::parseNumExpr(std::vector<Token>::const_iterator& itr){
                 return new Operator(op, lo, ro);    
             }
             else{
-                throw ParseError("Unexpected Token");
+                throw ParseError("Unexpected Token in Numeric Expression");
             }
             
     } else if (itr->tag == Token::NUM){             //nel caso ci fosse un numero viene restituito un numero
         return new Number(std::stoi(itr->word));    //converto in numero il contenuto della parola
     } else if (itr->tag == Token::VAR)
     {
-        // return new Variable(itr->word);          ancora da implementare correttamente un gestore dellev variabili
+        return new Variable(itr->word);             //ancora da implementare correttamente un gestore dellev variabili
     }
 
     //nel caso non fossi in nessuno di questi casi allora vi è un errore
-    throw ParseError("Unexpected Token");
+    throw ParseError("Unexpected Token in Numeric Expression");
     return nullptr;
 }
 
@@ -71,7 +71,7 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
             NumExpr* ro = parseNumExpr(itr);
             safe_next(itr);
             if (itr->tag == Token::RP) return new RelOp(op, lo, ro);
-            else throw ParseError("Unexpected token");
+            else throw ParseError("Unexpected token in Boolean Expression");
             break;
         }
         case Token::GT :
@@ -83,7 +83,7 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
             NumExpr* ro = parseNumExpr(itr);
             safe_next(itr);
             if (itr->tag == Token::RP) return new RelOp(op, lo, ro);
-            else throw ParseError("Unexpected token");
+            else throw ParseError("Unexpected token in Boolean Expression");
             break;
         }
         case Token::EQ :
@@ -95,7 +95,7 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
             NumExpr* ro = parseNumExpr(itr);
             safe_next(itr);
             if (itr->tag == Token::RP) return new RelOp(op, lo, ro);
-            else throw ParseError("Unexpected token");
+            else throw ParseError("Unexpected token  in Boolean Expression");
             break;
         }
         case Token::AND :
@@ -107,7 +107,7 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
             BoolExpr* ro = parseBoolExpr(itr);
             safe_next(itr);
             if (itr->tag == Token::RP) return new BinaryBoolOp(op, lo, ro);
-            else throw ParseError("Unexpected token");
+            else throw ParseError("Unexpected token in Boolean Expression");
             break;
         }
         case Token::OR : 
@@ -119,7 +119,7 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
             BoolExpr* ro = parseBoolExpr(itr);
             safe_next(itr);
             if (itr->tag == Token::RP) return new BinaryBoolOp(op, lo, ro);
-            else throw ParseError("Unexpected token");
+            else throw ParseError("Unexpected token  in Boolean Expression");
             break;
         }
         case Token::NOT :
@@ -128,11 +128,11 @@ BoolExpr* Program::parseBoolExpr(std::vector<Token>::const_iterator& itr){
             BoolExpr* e = parseBoolExpr(itr);
             safe_next(itr);
             if (itr->tag == Token::RP) return new NotBoolOp(e);
-            else throw ParseError("Unexpected token");
+            else throw ParseError("Unexpected token  in Boolean Expression");
         }
         default:
             {
-            throw ParseError("Unrecognized Operator");
+            throw ParseError("Unrecognized Operator  in Boolean Expression");
             break;
             }
         }
@@ -154,11 +154,13 @@ void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
         safe_next(itr);
         if (itr->tag == Token::BLOCK)
         {
+            std::cout << "Entering in BLOCK" << std::endl;
             safe_next(itr);
-            while (itr->tag != Token::RP);
+            while (itr->tag != Token::RP)
             {
                 if (itr->tag == Token::LP)
                 {
+                    safe_next(itr);
                     b->push_back(recursiveParse(itr));
                     safe_next(itr);
                 } else {
@@ -167,6 +169,7 @@ void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
             }
         }
         else {
+            std::cout << "Single Statement" << std::endl;
             b->push_back(recursiveParse(itr)); 
         }
         
@@ -196,7 +199,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
                     break;
                 }
                 else {
-                    throw ParseError("Mismatched Parenthesis");
+                    throw ParseError("SET, Mismatched Parenthesis");
                     return nullptr;
                     break;
                 }
@@ -216,7 +219,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
                 break;
             }
             else {
-                throw ParseError("Mismatched Parenthesis"); 
+                throw ParseError("PRINT, Mismatched Parenthesis"); 
                 return nullptr;
                 break;
             }
@@ -232,11 +235,13 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
                     break;
                 }
                 else {
-                    throw ParseError("Mismatched Parenthesis") ;        
+                    throw ParseError("INPUT, Mismatched Parenthesis") ;      
+                    return nullptr;  
                     break;  
                 }
             } else {
                 throw ParseError("INPUT statement, expected variable token");
+                return nullptr;
                 break;
             }
         }   
@@ -250,21 +255,32 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             Block* fls = new Block();
             parseBlock(itr, fls);
-            if(itr->tag == Token::RP) return makeIf(expr, tr, fls);
-            else throw ParseError("Mismatched Parenthesis");
-            break;
+            if(itr->tag == Token::RP) {
+                return makeIf(expr, tr, fls);
+                break;
+            }
+            else 
+            {
+                throw ParseError("IF, Mismatched Parenthesis");
+                return nullptr;
+                break;
+            }
         }
         case Token::WHILE :
         {
             safe_next(itr);
             BoolExpr* expr = parseBoolExpr(itr);
             safe_next(itr);
-            Block* bl;
+            Block* bl = new Block();
             parseBlock(itr, bl);
-            safe_next(itr);
-            if(itr->tag == Token::RP) return makeWhile(expr, bl);
-            else throw ParseError("Mismatched Parenthesis");
-            break;
+            // safe_next(itr); viene già eseguito in parseblock
+            if(itr->tag == Token::RP){
+                return makeWhile(expr, bl);
+                break;
+            } else {
+                throw ParseError("WHILE, Mismatched Parenthesis");
+                break;
+            }
         }
         default:
             throw ParseError("Invalid Token");
