@@ -1,6 +1,8 @@
 #include <sstream>
 #include <string>
 #include "Exceptions.h"
+#include "Token.h"
+#include "Tokenizer.h"
 #include "Expressions.h"
 #include "Statement.h"
 #include "Block.h"
