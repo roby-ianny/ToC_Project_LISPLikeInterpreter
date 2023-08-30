@@ -30,6 +30,10 @@ class Block{
             allocated.resize(0);
         }
 
+        std::vector<Statement*> getAllocated() const{
+            return allocated;
+        }
+
         // Definisco questo metodo da utilizzare nel parser, questo perché evito dipendenze cicliche in questo modo
         void push_back(Statement* s){
             allocated.push_back(s);

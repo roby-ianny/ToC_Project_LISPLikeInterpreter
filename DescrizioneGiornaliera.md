@@ -24,7 +24,7 @@ Sulla falsa riga di quanto fornito nelle dispense e di quanto visto a lezione, i
 - Expression.h
     - Libreria contenente la definizione delle espressioni, nel nostro caso invece saranno degli statement block quindi potremmo anche chiamarlo "Statement.h"
 - Expression.cpp
-    - Contiene i metodi che restituiscono i token corretti quando si utilizza il visitor
+    - Contiene i metodi che restituiscono i token corretti quando si utilizza il ExecutionVisitor
 - Expressionmanager.h
     - È una libreria che implementa una componente che si occupa di deallocare correttamente la memoria
 - Parser.h
@@ -36,8 +36,8 @@ Sulla falsa riga di quanto fornito nelle dispense e di quanto visto a lezione, i
     - Token.cpp si occupa dell'overload dell'operatore di stampa
 - Tokenizer.h
     - È la libreria che implementa il tokenizer, che si occupa dell'abbinamento file-token_sequence
-- Visitor.h
-    - È la libreria che implementa il vero e proprio esecutore delle istruzioni, in base a ciò che legge dalla token stream, il visitor esegue le varie operazioni
+- ExecutionVisitor.h
+    - È la libreria che implementa il vero e proprio esecutore delle istruzioni, in base a ciò che legge dalla token stream, il ExecutionVisitor esegue le varie operazioni
 - Interpreter.cpp 
     - È il programma "main", che si occupa di eseguire in sequenza le fasi di analisi lessicale, semantica e sintattica.
 
@@ -53,7 +53,7 @@ Creazione di uno "scheletro" per l'analisi lessicale, a partire dall'UML
 ## Giorno 6 - 11/08/2023
 Ridefinita la struttura per l'analisi lessicale, l'intuizione a partire da quanto visto a lezione è che Block funge da "ExpressionManager" (per far riferimento a quanto visto a lezione), che è quindi appunto una statement list come definita dalla grammatica.
 A un programma viene assegnato uno e un solo block perché il block può contenerne altri a sua volta ma non posso avere due blocchi distinti, sarebbe come avere due "main"
-Program invece funge da "ParseExpression", e di fatti conterrà l'albero sintattico che verrà poi utilizzato dal visitor.
+Program invece funge da "ParseExpression", e di fatti conterrà l'albero sintattico che verrà poi utilizzato dal ExecutionVisitor.
 Sulla falsa riga di quanto fatto a lezione sono stati definite le classi per gli statement e le espressioni.
 Per le NumExpr è stato riportato 1:1 la parte fatta a lezione, mentre per le BoolExpr si è svolto un lavoro similare (iniziale, terminerà la prossima volta)
 
@@ -74,7 +74,7 @@ In questo caso è preferibile utilizzare delle friend functions, ma la cosa rima
 Iniziato ad impostare i comportamenti del parser.
 
 ## Giorno 9 - 23/07/2023
-Implementazione iniziale dei parser delle espressioni Booleane e delle espressioni aritmetiche, prendere nota del fatto che non vi è ancora un gestore delle variabili allocate, ma questo andrà gestito a livello di visitor, ed evenutalmente aggiunto in seguito anche a livello di parsing per ottimizzare le risorse allocate (?).
+Implementazione iniziale dei parser delle espressioni Booleane e delle espressioni aritmetiche, prendere nota del fatto che non vi è ancora un gestore delle variabili allocate, ma questo andrà gestito a livello di ExecutionVisitor, ed evenutalmente aggiunto in seguito anche a livello di parsing per ottimizzare le risorse allocate (?).
 
 È stato anche scritto una versione iniziale del parser "principale", il programma compila correttamente e termina senza entrare in loop.
 Il problema è che va in parse error, capita che vede statement che non esistono, va sistemata la gestione dell'iterator.

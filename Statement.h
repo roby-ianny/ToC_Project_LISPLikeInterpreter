@@ -6,13 +6,13 @@
 #include "Expressions.h"
 
 //Forward Declaration
-class Visitor; 
+class ExecutionVisitor; 
 class Block;
 
 class Statement{
     public:
         virtual ~Statement() {};
-        // virtual void accept(Visitor* v) = 0;
+        virtual void accept(ExecutionVisitor* v) = 0;
 };
 
 
@@ -26,6 +26,9 @@ class SetStmt : public Statement {
 
         SetStmt(const SetStmt& other) = default;
         SetStmt& operator=(const SetStmt& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
+
     private:
         NumExpr* expr;
         Variable* var;

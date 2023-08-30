@@ -18,7 +18,7 @@ Si avrà quindi la famosa "statement_list", il problema però potrebbe essere un
 Tecnicamente la risposta sarebbe: "non ce lo metto, ci infilo semplicemente tutto gli statements che contiene"
 
 E poi?
-E poi non me ne frega più niente perché sarà un problema del roberto del futuro quando dovrà fare il visitor.
+E poi non me ne frega più niente perché sarà un problema del roberto del futuro quando dovrà fare il ExecutionVisitor.
 Ok ma ha senso con la forma dell'albero sintattico? tecnicamente si perchè alla fine tutto ciò è contenuto da uno statement più "grosso", ovvero uno di quelli di cui parlavo prima, if e while)
 
 Infatti, per come il linguaggio è stato definito, non è che block compare a caso, ma solo in determinate situazioni, che sono 3.

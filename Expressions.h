@@ -8,7 +8,7 @@
 class NumExpr{
     public:
         virtual ~NumExpr(){};
-        // virtual void accept(Visitor* v) = 0;
+        // virtual void accept(ExecutionVisitor* v) = 0;
 
 };
 
@@ -35,7 +35,7 @@ class Operator : public NumExpr{
             return ro;
         }
 
-        // void accept(Visitor* v) override;
+        // void accept(ExecutionVisitor* v) override;
 
     private:
         OpCode op;
@@ -55,7 +55,7 @@ class Number : public NumExpr{
             return value;
         };
 
-        // void accept(Visitor* v) override;
+        // void accept(ExecutionVisitor* v) override;
 
     private:
         int value;
@@ -80,7 +80,7 @@ class Variable : public NumExpr{
             return value;
         }
 
-        //void accept(Visitor* v) override;
+        //void accept(ExecutionVisitor* v) override;
 
     private:
         std::string name;
@@ -90,7 +90,7 @@ class Variable : public NumExpr{
 class BoolExpr{
     public:
         virtual ~BoolExpr(){};
-        //virtual void accept(Visitor* v) = 0;
+        //virtual void accept(ExecutionVisitor* v) = 0;
 };
 
 class BoolConst : public BoolExpr{

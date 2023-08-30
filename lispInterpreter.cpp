@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     /*Fase 2 - Parsing
     File interessati: Expression.h, Expression.cpp, Statement.h, Statement.cpp, Program.h, Program.cpp interessati*/
     
-    //Creo il node manager, ovvero ciò che mi costituisce il block
+    //Creo il node manager, ovvero ciò che mi costituisce il blocco principale che contiene tutto il programma
     Block main_bl;
 
     //Creo il function object per il parsing
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     try {
         Block* main = parse(inputTokens);
         std::cout << "Parsing terminato" << std::endl;
-        //PrintVisitor p = new PrintVisitor();
+        //PrintExecutionVisitor p = new PrintExecutionVisitor();
         //std::cout << "L'espressione letta è ";
     } catch (ParseError& pe){
         std::cerr << "Errore in parsing: ";
