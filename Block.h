@@ -6,6 +6,7 @@
 #include "Statement.h"
 
 class Statement; //Forward declaration
+class ExecutionVisitor;
 
 class Block{
     public:
@@ -39,6 +40,7 @@ class Block{
             allocated.push_back(s);
         }
 
+        void accept(ExecutionVisitor* v);
     private:
         std::vector<Statement*> allocated;
 };

@@ -5,10 +5,12 @@
 
 #include <string>
 
+class ExecutionVisitor;
+
 class NumExpr{
     public:
         virtual ~NumExpr(){};
-        // virtual void accept(ExecutionVisitor* v) = 0;
+        virtual void accept(ExecutionVisitor* v) = 0;
 
 };
 
@@ -35,7 +37,7 @@ class Operator : public NumExpr{
             return ro;
         }
 
-        // void accept(ExecutionVisitor* v) override;
+        void accept(ExecutionVisitor* v) override;
 
     private:
         OpCode op;
@@ -55,8 +57,8 @@ class Number : public NumExpr{
             return value;
         };
 
-        // void accept(ExecutionVisitor* v) override;
-
+        void accept(ExecutionVisitor* v) override;
+        
     private:
         int value;
 
@@ -80,8 +82,8 @@ class Variable : public NumExpr{
             return value;
         }
 
-        //void accept(ExecutionVisitor* v) override;
-
+        void accept(ExecutionVisitor* v) override;
+        
     private:
         std::string name;
         int value;
@@ -90,7 +92,7 @@ class Variable : public NumExpr{
 class BoolExpr{
     public:
         virtual ~BoolExpr(){};
-        //virtual void accept(ExecutionVisitor* v) = 0;
+        virtual void accept(ExecutionVisitor* v) = 0;
 };
 
 class BoolConst : public BoolExpr{
@@ -105,6 +107,8 @@ class BoolConst : public BoolExpr{
         BoolConstValue getValue() const{
             return value;
         }
+
+        void accept(ExecutionVisitor* v) override;
 
     private:
         BoolConstValue value;
@@ -131,6 +135,7 @@ class RelOp : public BoolExpr{
             return ro;
         }
 
+        void accept(ExecutionVisitor* v) override;
     private:
         RelOpCode op;
         NumExpr* lo;
@@ -159,6 +164,9 @@ class BinaryBoolOp : public BoolExpr{
 
         BinaryBoolOp(const BinaryBoolOp& other) = default;
         BinaryBoolOp& operator=(const BinaryBoolOp& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
+
     private:
         BinBoolOpCode op;
         BoolExpr* lo;
@@ -176,6 +184,9 @@ class NotBoolOp : public BoolExpr{
 
         NotBoolOp(const NotBoolOp& other) = default;
         NotBoolOp& operator=(const NotBoolOp& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
+
     private:
         //NotOpCode op;
         BoolExpr* expr;

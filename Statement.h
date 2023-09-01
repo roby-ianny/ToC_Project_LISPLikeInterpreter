@@ -28,7 +28,6 @@ class SetStmt : public Statement {
         SetStmt& operator=(const SetStmt& other) = default;
 
         void accept(ExecutionVisitor* v) override;
-
     private:
         NumExpr* expr;
         Variable* var;
@@ -44,6 +43,7 @@ class PrintStmt : public Statement {
         PrintStmt(const PrintStmt& other) = default;
         PrintStmt& operator=(const PrintStmt& other) = default;
 
+        void accept(ExecutionVisitor* v) override;
     private:
         NumExpr* e;
 };
@@ -57,6 +57,8 @@ class InputStmt : public Statement {
 
         InputStmt(const InputStmt& other) = default;
         InputStmt& operator=(const InputStmt& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
     private:
         Variable* var;
 };
@@ -72,6 +74,8 @@ class IfStmt : public Statement {
 
         IfStmt(const IfStmt& other) = default;
         IfStmt& operator=(const IfStmt& other) = default;
+
+        void accept(ExecutionVisitor* v)override;
     private:
         BoolExpr* bexpr;
         Block* true_case;
@@ -89,6 +93,8 @@ class WhileStmt : public Statement {
 
         WhileStmt(const WhileStmt& other) = default;
         WhileStmt& operator=(const WhileStmt& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
     private:
         BoolExpr* bexpr;
         Block* b;

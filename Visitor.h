@@ -3,6 +3,9 @@
 
 #include <vector>
 #include "Block.h"
+#include "Statement.h"
+#include "Expressions.h"
+#include "Exceptions.h"
 
 class ExecutionVisitor {
     public:
@@ -10,7 +13,7 @@ class ExecutionVisitor {
         
         void visitBlock(const Block* b){
             for (Statement* st : b->getAllocated()){
-                //esegue tutte le istruzioni contenute negli statements
+                st->accept(this);
             }
         }
 
@@ -46,8 +49,11 @@ class ExecutionVisitor {
 
         }
 
-        void vistBoolExpr(const BoolConst* bc){
-
+        void visitBoolExpr(const BoolConst* bc){
+            if (bc->getValue() == BoolConst::TRUE ) bool_accumulator.push_back(true);
+            else if (bc->getValue() == BoolConst::FALSE) bool_accumulator.push_back(false);
+            else SemanticError("Invalid bool constant");
+            
         }
 
         void visitBoolExpr(const RelOp* ro){
