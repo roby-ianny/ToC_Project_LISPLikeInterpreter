@@ -165,6 +165,18 @@ class BinaryBoolOp : public BoolExpr{
         BinaryBoolOp(const BinaryBoolOp& other) = default;
         BinaryBoolOp& operator=(const BinaryBoolOp& other) = default;
 
+        BoolExpr* getLeft() const{
+            return lo;
+        }
+
+        BoolExpr* getRight() const{
+            return ro;
+        }
+
+        BinBoolOpCode getOpCode() const{
+            return op;
+        }
+
         void accept(ExecutionVisitor* v) override;
 
     private:
@@ -186,6 +198,10 @@ class NotBoolOp : public BoolExpr{
         NotBoolOp& operator=(const NotBoolOp& other) = default;
 
         void accept(ExecutionVisitor* v) override;
+
+        BoolExpr* getOperand() const{
+            return expr;
+        }
 
     private:
         //NotOpCode op;
