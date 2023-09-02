@@ -68,6 +68,7 @@ class Variable : public NumExpr{
     public:
         Variable( std::string n, int v ) : name( n ), value( v ) {}
         //aggiungo un costruttore con solo id e imposto a 0 il valore iniziale della variabile
+        //questo costruttore è necessario solo per il set statement, dove una var
         Variable( std::string id) : name{ id }, value{ 0 } {};
         ~Variable() = default;
 
@@ -80,6 +81,10 @@ class Variable : public NumExpr{
 
         int getValue() const{
             return value;
+        }
+
+        void setValue(int v){
+            value = v;
         }
 
         void accept(ExecutionVisitor* v) override;
