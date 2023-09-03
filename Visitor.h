@@ -14,13 +14,18 @@ class ExecutionVisitor {
         
         void visitBlock(const Block* b){
             for (Statement* st : b->getAllocated()){
+                std::cout << "Visiting ";
                 st->accept(this);
             }
         }
 
         void visitStatement(const SetStmt* s){
-            Variable* v = s->getVar();          //prendo la variabile dallo statement
+            std::cout << "SetStatement " << std::endl;
+            Variable* v = new Variable(s->getVar()->getName());          //prendo la variabile dallo statement
             // verifico se la variabile è già presente nel gestore delle variabili
+            NumExpr* e = s->getExpr();
+            e->accept(this);
+            v->setValue(int_accumulator.back()); int_accumulator.pop_back();
             for (size_t i = 0; i < vars.size() ; i++)
             {
                 if (v->getName() == vars[i]->getName())
@@ -34,6 +39,7 @@ class ExecutionVisitor {
         }
         
         void visitStatement(const PrintStmt* s){
+            std::cout << "PrintStatement " << std::endl;
             NumExpr* ex = s->getExpr();
             ex->accept(this);
 
@@ -45,6 +51,7 @@ class ExecutionVisitor {
 
         void visitStatement(const InputStmt* s){
             //fase iniziale, prendo in input il valore della variabile
+            std::cout << "InputStatement " << std::endl;
             Variable* v = s->getVar();
             int val;
 
@@ -71,6 +78,7 @@ class ExecutionVisitor {
         }
 
         void visitStatement(const IfStmt* s){
+            std::cout << "IfStatement " << std::endl;
             BoolExpr* c = s->getCondition();
             c->accept(this);        //con accept avrà il valore della condition in booleano nell'accumulatore
             if(bool_accumulator.back() == true){
@@ -86,6 +94,7 @@ class ExecutionVisitor {
         }
 
         void visitStatement(const WhileStmt* s){
+            std::cout << "WhileStatement" << std::endl;
             // analogamente a quanto visto per If
             BoolExpr* c = s->getCondition();
             c->accept(this);
@@ -93,6 +102,7 @@ class ExecutionVisitor {
 
             while (bool_accumulator.back()==true)
             {
+                std::cout << "Entering in loop (again?)" << std::endl;
                 loop->accept(this);
                 bool_accumulator.pop_back(); //rimuovo l'ultima valutazione della condizione
                 // rivaluto la condizione
@@ -102,6 +112,7 @@ class ExecutionVisitor {
         }
 
         void visitNumExpr(const Operator* op){
+            std::cout << "Visiting Operator " << std::endl;
             // Propago la visita ai due operandi
             NumExpr* left = op->getLeft();
             left->accept(this);
@@ -136,23 +147,26 @@ class ExecutionVisitor {
         }
 
         void visitNumExpr(const Number* n){
+            std::cout << "Visiting Number " << std::endl;
             int_accumulator.push_back(n->get_Value());  //mette il numero nell'accumulatore
         }
 
         void visitNumExpr(const Variable* v){
             /*NB: Bisogna vedere se è stata definita prima!!*/
+            std::cout << "Visiting Variable " << std::endl;
             for(size_t i = 0; i < vars.size(); i++){
                 if (v->getName() == vars[i]->getName())
                 {
+                    std::cout << "Variable Exists: " << v->getName() << " " << v->getValue() << std::endl;
                     int_accumulator.push_back(vars[i]->getValue());
                     return; //esco dal metodo
                 }
             } // Se esco dal ciclo significa che la variabile non c'è, quindi
-
             throw SemanticError("Undeclared Variable");
         }
 
         void visitBoolExpr(const BoolConst* bc){
+            std::cout << "Visiting BoolConst " << std::endl;
             if (bc->getValue() == BoolConst::TRUE ) bool_accumulator.push_back(true);
             else if (bc->getValue() == BoolConst::FALSE) bool_accumulator.push_back(false);
             else SemanticError("Invalid bool constant");
@@ -160,6 +174,8 @@ class ExecutionVisitor {
         }
 
         void visitBoolExpr(const RelOp* ro){
+
+            std::cout << "Visiting Relational Operator " << std::endl;
             NumExpr* left = ro->getLeft();
             left->accept(this);
             NumExpr* right = ro->getRight();
@@ -186,6 +202,9 @@ class ExecutionVisitor {
         }
 
         void visitBoolExpr(const BinaryBoolOp* op){
+
+            std::cout << "Visiting Binary Bool Operator " << std::endl;
+
             BoolExpr* left = op->getLeft();
             left->accept(this);
             BoolExpr* right = op->getRight();
@@ -209,6 +228,9 @@ class ExecutionVisitor {
         }
 
         void visitBoolExpr(const NotBoolOp* op){
+
+            std::cout << "Visiting Not Bool Operator " << std::endl;
+
             BoolExpr* o = op->getOperand();
             o->accept(this);
             bool val = bool_accumulator.back(); bool_accumulator.pop_back();

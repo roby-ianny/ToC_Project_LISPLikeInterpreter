@@ -1,0 +1,1 @@
+Allora, il metodo setValue potrebbe di fatti non funzionare, questo perchè utilizzo metodi const, a questo punto, nel caso non dovessi riuscire a farlo funzionare, un alternativa potrebbe essere quella di eliminare le variabili da quelle esistenti e reinserirle col valore aggiornato quando avviene un input o un set

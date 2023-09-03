@@ -74,8 +74,9 @@ int main(int argc, char *argv[])
     try {
         Block* main = parse(inputTokens);
         std::cout << "Parsing terminato" << std::endl;
-        //PrintExecutionVisitor p = new PrintExecutionVisitor();
-        //std::cout << "L'espressione letta è ";
+        //Creo l'execution visitor
+        ExecutionVisitor* v = new ExecutionVisitor();
+        main->accept(v);
     } catch (ParseError& pe){
         std::cerr << "Errore in parsing: ";
         std::cerr << pe.what() << std::endl ;
