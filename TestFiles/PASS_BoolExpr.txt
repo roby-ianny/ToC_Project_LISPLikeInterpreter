@@ -8,7 +8,7 @@
       (SET nearest (MUL ires d))
       (SET remainder (SUB n nearest))
       (IF (AND (EQ isprime 1) (EQ remainder 0))
-      	  (SET isprime 0)
+      	  (SET isprime 0))
 	  (SET isprime 1))
       (SET d (SUB d 1))))
   (PRINT isprime))

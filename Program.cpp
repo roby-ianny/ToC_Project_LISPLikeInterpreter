@@ -168,10 +168,12 @@ void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
                     throw ParseError("Unexpected Token in BLOCK");
                 }            
             }
+            safe_next(itr); // utile per blocchi interni
         }
         else {
             std::cout << "Single Statement" << std::endl;
             b->push_back(recursiveParse(itr)); 
+            safe_next(itr);
         }
         
     }
@@ -181,9 +183,6 @@ void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
 
 //Parser a discesa ricorsiva
 Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
-    /*if (itr->tag == Token::LP)
-    {
-        safe_next(itr);*/
         switch (itr->tag)
         {
         case Token::SET :
@@ -253,7 +252,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             Block* tr = new Block();
             parseBlock(itr, tr);
-            safe_next(itr);
+            // safe_next(itr);
             Block* fls = new Block();
             parseBlock(itr, fls);
             if(itr->tag == Token::RP) {
@@ -274,7 +273,6 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             Block* bl = new Block();
             parseBlock(itr, bl);
-            // safe_next(itr); viene già eseguito in parseblock
             if(itr->tag == Token::RP){
                 return makeWhile(expr, bl);
                 break;
@@ -288,10 +286,4 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             return nullptr;
             break;
         }
-    /*}
-    else {
-        throw ParseError("Mismatched Parenthesis");
-        return nullptr;
-    }
-    */
 }
