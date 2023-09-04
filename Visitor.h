@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
 #include "Block.h"
 #include "Statement.h"
 #include "Expressions.h"
@@ -13,29 +14,31 @@ class ExecutionVisitor {
         ExecutionVisitor() : vars{ } , int_accumulator{ }, bool_accumulator{ } {}
         
         void visitBlock(const Block* b){
+            std::cout << "Visiting Block" << std::endl;
             for (Statement* st : b->getAllocated()){
                 std::cout << "Visiting ";
                 st->accept(this);
             }
+            return;
         }
 
         void visitStatement(const SetStmt* s){
             std::cout << "SetStatement " << std::endl;
-            Variable* v = new Variable(s->getVar()->getName());          //prendo la variabile dallo statement
-            // verifico se la variabile è già presente nel gestore delle variabili
-            NumExpr* e = s->getExpr();
-            e->accept(this);
-            v->setValue(int_accumulator.back()); int_accumulator.pop_back();
+            std::string name = s->getVar()->getName();  // prendo il nome della variabile dal set statement
+            NumExpr* e = s->getExpr();                  // prendo l'espressione numerica
+            e->accept(this);                            // calcolo il valore dell'espressione numerica
+            Variable* v = new Variable(name, int_accumulator.back());
+            int_accumulator.pop_back();                 // elimino il valore dall'accumulatore
             for (size_t i = 0; i < vars.size() ; i++)
             {
-                if (v->getName() == vars[i]->getName())
+                if (v->getName() == vars[i]->getName()) // la variabile era già stata dichiarata
                 {
-                    vars[i]->setValue(v->getValue());
-                    return; //per uscire dalla funzione
+                    vars.erase(vars.begin() + i);       // elimino la variabile dal gestore
+                    vars.push_back(v);                  // reinserisco la variabile col nuovo valore
+                    return;                             // esco dal metodo
                 }
             } //se sono uscito dal ciclo for significa che la variabile non è presente nell'accumulatore
-            // allora aggiungo la variabile
-            vars.push_back(v);
+            vars.push_back(v);                          // inserisco la variabile nel gestore
         }
         
         void visitStatement(const PrintStmt* s){
@@ -52,29 +55,29 @@ class ExecutionVisitor {
         void visitStatement(const InputStmt* s){
             //fase iniziale, prendo in input il valore della variabile
             std::cout << "InputStatement " << std::endl;
-            Variable* v = s->getVar();
+            std::string name = s->getVar()->getName();
             int val;
 
-            std::cout << "Inserire il valore per la variabile " << v->getName() << ": " ;
+            std::cout << "Inserire il valore per la variabile " << name << ": " ;
             
             if(!(std::cin >> val)){              //prendo val in input, se non ricevo un intero restituisco un errore
-                throw SemanticError("Invalid Input. Expectet int value");
+                throw SemanticError("Invalid Input. Expected int value");
             }
-
-            v->setValue(val);
             
+            Variable* v = new Variable(name, val);
+
             //ora che si ha una variabile "completa", ovvero con il valore inserito
             //utilizzo lo stesso meccanismo di setstmt
             for (size_t i = 0; i < vars.size() ; i++)
             {
                 if (v->getName() == vars[i]->getName())
                 {
-                    vars[i]->setValue(v->getValue());
-                    return; //per uscire dalla funzione
+                    vars.erase(vars.begin() + i);       // elimino la variabile "obsoleta"
+                    vars.push_back(v);
+                    return;                             //per uscire dalla funzione
                 }
             }
             vars.push_back(v);
-             
         }
 
         void visitStatement(const IfStmt* s){
@@ -96,9 +99,10 @@ class ExecutionVisitor {
         void visitStatement(const WhileStmt* s){
             std::cout << "WhileStatement" << std::endl;
             // analogamente a quanto visto per If
+            Block* loop = s->getLoop();
+
             BoolExpr* c = s->getCondition();
             c->accept(this);
-            Block* loop = s->getLoop();
 
             while (bool_accumulator.back()==true)
             {
@@ -108,7 +112,8 @@ class ExecutionVisitor {
                 // rivaluto la condizione
                 c->accept(this);
             }
-            
+            bool_accumulator.pop_back();
+            return;
         }
 
         void visitNumExpr(const Operator* op){
@@ -157,7 +162,7 @@ class ExecutionVisitor {
             for(size_t i = 0; i < vars.size(); i++){
                 if (v->getName() == vars[i]->getName())
                 {
-                    std::cout << "Variable Exists: " << v->getName() << " " << v->getValue() << std::endl;
+                    std::cout << "Variable Exists: " << vars[i]->getName() << " " << vars[i]->getValue() << std::endl;
                     int_accumulator.push_back(vars[i]->getValue());
                     return; //esco dal metodo
                 }
@@ -178,22 +183,25 @@ class ExecutionVisitor {
             std::cout << "Visiting Relational Operator " << std::endl;
             NumExpr* left = ro->getLeft();
             left->accept(this);
+            int lval = int_accumulator.back(); 
+            int_accumulator.pop_back();
+
             NumExpr* right = ro->getRight();
             right->accept(this);
-
-            int rval = int_accumulator.back(); int_accumulator.pop_back();
-            int lval = int_accumulator.back(); int_accumulator.pop_back();
+            int rval = int_accumulator.back(); 
+            int_accumulator.pop_back();
+            
 
             switch (ro->getOp())
             {
             case RelOp::LT :
-                bool_accumulator.push_back(rval < lval);
+                bool_accumulator.push_back(lval < rval);
                 break;
             case RelOp::GT :
-                bool_accumulator.push_back(rval > lval);
+                bool_accumulator.push_back(lval > rval);
                 break;
             case RelOp::EQ :
-                bool_accumulator.push_back(rval == lval);
+                bool_accumulator.push_back(lval == rval);
                 break;
             default:
                 SemanticError("Invalid Relational Operator");

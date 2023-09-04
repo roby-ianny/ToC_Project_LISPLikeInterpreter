@@ -83,9 +83,11 @@ class Variable : public NumExpr{
             return value;
         }
 
+        /* É più opportuno sostituire le variabili piuttosto che modificarle
         void setValue(int v){
             value = v;
         }
+        */
 
         void accept(ExecutionVisitor* v) override;
         
