@@ -170,7 +170,8 @@ void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
                 }            
             }
         }
-        else {
+        else
+        {
             std::cout << "Single Statement" << std::endl;
             b->push_back(recursiveParse(itr)); 
         }
@@ -257,6 +258,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             Block* fls = new Block();
             parseBlock(itr, fls);
+            safe_next(itr);
             if(itr->tag == Token::RP) {
                 return makeIf(expr, tr, fls);
                 break;
@@ -275,7 +277,7 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
             safe_next(itr);
             Block* bl = new Block();
             parseBlock(itr, bl);
-            // safe_next(itr); viene già eseguito in parseblock
+            safe_next(itr);
             if(itr->tag == Token::RP){
                 return makeWhile(expr, bl);
                 break;
