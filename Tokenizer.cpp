@@ -80,10 +80,13 @@ void generateToken(std::string& term, std::vector<Token>& Tokens)
         }
         /*fin'ora abbiamo visto casi in cui si hanno elementi "costanti", mentre ora dobbiamo fare in modo di convertire elementi variabili in dei Token*/
         // Partiamo quindi dai numeri
-        else if (isdigit(term[0]) ) //se il primo termine della stringa corrisponde a un numero
+        else if (isdigit(term[0]) || term[0]=='-') //se il primo termine della stringa corrisponde a un numero
         {
             size_t i;
-            for (i = 0; i < term.length(); i++)
+            if (term[0] == '-') i = 1;
+            else i = 0;
+            
+            for (; i < term.length(); i++)
             {
                 if (!isdigit(term[i])) break;   //se incontro un termine che non è un numero allora interrompo il ciclo   
             }
