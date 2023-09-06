@@ -6,9 +6,11 @@
 #include "Exceptions.h"
 #include "Token.h"
 #include "Tokenizer.h"
+#include "Expressions.h"
 #include "Statement.h"
 #include "Block.h"
 #include "Program.h"
+#include "Visitor.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +44,7 @@ int main(int argc, char *argv[])
     {
         inputTokens = std::move(tokenize(inputFile));
         inputFile.close();  //dopo aver ottenuto la token sequence il file non è più necessario
+        std::cout << "Generazione dei Tokens terminata" << std::endl ;
     }
     catch(LexicalError& le)
     {
@@ -63,7 +66,7 @@ int main(int argc, char *argv[])
     /*Fase 2 - Parsing
     File interessati: Expression.h, Expression.cpp, Statement.h, Statement.cpp, Program.h, Program.cpp interessati*/
     
-    //Creo il node manager, ovvero ciò che mi costituisce il block
+    //Creo il node manager, ovvero ciò che mi costituisce il blocco principale che contiene tutto il programma
     Block main_bl;
 
     //Creo il function object per il parsing
@@ -72,8 +75,10 @@ int main(int argc, char *argv[])
     try {
         Block* main = parse(inputTokens);
         std::cout << "Parsing terminato" << std::endl;
-        //PrintVisitor p = new PrintVisitor();
-        //std::cout << "L'espressione letta è ";
+        //Creo l'execution visitor
+        std::cout << "Esecuzione del programma, sotto l'output restituito da esso: " << std::endl;
+        ExecutionVisitor* v = new ExecutionVisitor();
+        main->accept(v);
     } catch (ParseError& pe){
         std::cerr << "Errore in parsing: ";
         std::cerr << pe.what() << std::endl ;

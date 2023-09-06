@@ -6,13 +6,13 @@
 #include "Expressions.h"
 
 //Forward Declaration
-class Visitor; 
+class ExecutionVisitor; 
 class Block;
 
 class Statement{
     public:
         virtual ~Statement() {};
-        // virtual void accept(Visitor* v) = 0;
+        virtual void accept(ExecutionVisitor* v) = 0;
 };
 
 
@@ -26,6 +26,17 @@ class SetStmt : public Statement {
 
         SetStmt(const SetStmt& other) = default;
         SetStmt& operator=(const SetStmt& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
+
+        Variable* getVar() const{
+            return var;
+        }
+
+        NumExpr* getExpr() const{
+            return expr;
+        }
+
     private:
         NumExpr* expr;
         Variable* var;
@@ -38,9 +49,15 @@ class PrintStmt : public Statement {
         ~PrintStmt(){
             delete(e);
         }
+
         PrintStmt(const PrintStmt& other) = default;
         PrintStmt& operator=(const PrintStmt& other) = default;
 
+        NumExpr* getExpr () const {
+            return e;
+        }
+
+        void accept(ExecutionVisitor* v) override;
     private:
         NumExpr* e;
 };
@@ -54,6 +71,13 @@ class InputStmt : public Statement {
 
         InputStmt(const InputStmt& other) = default;
         InputStmt& operator=(const InputStmt& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
+
+        Variable* getVar() const{
+            return var;
+        }
+
     private:
         Variable* var;
 };
@@ -69,6 +93,21 @@ class IfStmt : public Statement {
 
         IfStmt(const IfStmt& other) = default;
         IfStmt& operator=(const IfStmt& other) = default;
+
+        void accept(ExecutionVisitor* v)override;
+
+        BoolExpr* getCondition() const{
+            return bexpr;
+        }
+
+        Block* getTrueCase() const{
+            return true_case;
+        }
+
+        Block* getFalseCase() const{
+            return false_case;
+        }
+
     private:
         BoolExpr* bexpr;
         Block* true_case;
@@ -86,6 +125,17 @@ class WhileStmt : public Statement {
 
         WhileStmt(const WhileStmt& other) = default;
         WhileStmt& operator=(const WhileStmt& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
+
+        BoolExpr* getCondition() const{
+            return bexpr;
+        }
+
+        Block* getLoop() const{
+            return b;
+        }
+
     private:
         BoolExpr* bexpr;
         Block* b;

@@ -5,10 +5,12 @@
 
 #include <string>
 
+class ExecutionVisitor;
+
 class NumExpr{
     public:
         virtual ~NumExpr(){};
-        // virtual void accept(Visitor* v) = 0;
+        virtual void accept(ExecutionVisitor* v) = 0;
 
 };
 
@@ -35,7 +37,7 @@ class Operator : public NumExpr{
             return ro;
         }
 
-        // void accept(Visitor* v) override;
+        void accept(ExecutionVisitor* v) override;
 
     private:
         OpCode op;
@@ -55,8 +57,8 @@ class Number : public NumExpr{
             return value;
         };
 
-        // void accept(Visitor* v) override;
-
+        void accept(ExecutionVisitor* v) override;
+        
     private:
         int value;
 
@@ -66,6 +68,7 @@ class Variable : public NumExpr{
     public:
         Variable( std::string n, int v ) : name( n ), value( v ) {}
         //aggiungo un costruttore con solo id e imposto a 0 il valore iniziale della variabile
+        //questo costruttore è necessario solo per il set statement, dove una var
         Variable( std::string id) : name{ id }, value{ 0 } {};
         ~Variable() = default;
 
@@ -80,8 +83,14 @@ class Variable : public NumExpr{
             return value;
         }
 
-        //void accept(Visitor* v) override;
+        /* É più opportuno sostituire le variabili piuttosto che modificarle
+        void setValue(int v){
+            value = v;
+        }
+        */
 
+        void accept(ExecutionVisitor* v) override;
+        
     private:
         std::string name;
         int value;
@@ -90,7 +99,7 @@ class Variable : public NumExpr{
 class BoolExpr{
     public:
         virtual ~BoolExpr(){};
-        //virtual void accept(Visitor* v) = 0;
+        virtual void accept(ExecutionVisitor* v) = 0;
 };
 
 class BoolConst : public BoolExpr{
@@ -105,6 +114,8 @@ class BoolConst : public BoolExpr{
         BoolConstValue getValue() const{
             return value;
         }
+
+        void accept(ExecutionVisitor* v) override;
 
     private:
         BoolConstValue value;
@@ -131,6 +142,7 @@ class RelOp : public BoolExpr{
             return ro;
         }
 
+        void accept(ExecutionVisitor* v) override;
     private:
         RelOpCode op;
         NumExpr* lo;
@@ -159,6 +171,21 @@ class BinaryBoolOp : public BoolExpr{
 
         BinaryBoolOp(const BinaryBoolOp& other) = default;
         BinaryBoolOp& operator=(const BinaryBoolOp& other) = default;
+
+        BoolExpr* getLeft() const{
+            return lo;
+        }
+
+        BoolExpr* getRight() const{
+            return ro;
+        }
+
+        BinBoolOpCode getOpCode() const{
+            return op;
+        }
+
+        void accept(ExecutionVisitor* v) override;
+
     private:
         BinBoolOpCode op;
         BoolExpr* lo;
@@ -176,6 +203,13 @@ class NotBoolOp : public BoolExpr{
 
         NotBoolOp(const NotBoolOp& other) = default;
         NotBoolOp& operator=(const NotBoolOp& other) = default;
+
+        void accept(ExecutionVisitor* v) override;
+
+        BoolExpr* getOperand() const{
+            return expr;
+        }
+
     private:
         //NotOpCode op;
         BoolExpr* expr;

@@ -17,5 +17,11 @@ struct ParseError : std::runtime_error
     ParseError(std::string msg) : std::runtime_error(msg.c_str()){ }
 };
 
+struct SemanticError : std::runtime_error
+{
+    SemanticError(const char* msg) : std::runtime_error(msg){ }
+    SemanticError(std::string msg) : std::runtime_error(msg.c_str()){ }
+};
+
 
 #endif
