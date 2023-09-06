@@ -214,20 +214,48 @@ class ExecutionVisitor {
             // std::cout << "Visiting Binary Bool Operator " << std::endl;
 
             BoolExpr* left = op->getLeft();
-            left->accept(this);
-            bool rval = bool_accumulator.back(); bool_accumulator.pop_back();
+            // left->accept(this);
+            // bool rval = bool_accumulator.back(); bool_accumulator.pop_back();
             BoolExpr* right = op->getRight();
-            right->accept(this);
-            bool lval = bool_accumulator.back(); bool_accumulator.pop_back();          
+            // right->accept(this);
+            // bool lval = bool_accumulator.back(); bool_accumulator.pop_back();          
             
             switch (op->getOpCode())
             {
             case BinaryBoolOp::AND :
-                bool_accumulator.push_back(rval && lval);
-                break;
+            {
+                // visto che and è cortocircuitato bisogna prima fare una valutazione SOLO sul primo operando
+                left->accept(this);
+                bool lval = bool_accumulator.back(); bool_accumulator.pop_back();
+                if (lval == false) {
+                    bool_accumulator.push_back(false);
+                    break;
+                }
+                else{
+                    // nel caso il primo operando fosse TRUE, allora bisonga andare a controllare il secondo
+                    right->accept(this);
+                    bool rval = bool_accumulator.back(); bool_accumulator.pop_back();
+                    bool_accumulator.push_back(lval && rval);
+                    break;
+                }
+                // bool_accumulator.push_back(lval && rval);
+            }
             case BinaryBoolOp::OR :
-                bool_accumulator.push_back(rval || lval);
-                break;            
+            {
+                // anche OR è cortocircuitato, quindi si applica il medesimo ragionamento fatto per AND
+                left->accept(this);
+                bool lval = bool_accumulator.back(); bool_accumulator.pop_back();
+                if (lval == true){
+                    bool_accumulator.push_back(true);
+                    break;
+                } else {
+                    right->accept(this);
+                    bool rval = bool_accumulator.back(); bool_accumulator.pop_back();
+                    bool_accumulator.push_back(lval || rval);
+                    break;
+                }
+                // bool_accumulator.push_back(lval || rval);
+            }          
             default:
                 SemanticError("Invalid Boolean Operator");
                 break;

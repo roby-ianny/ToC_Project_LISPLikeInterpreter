@@ -1,0 +1,5 @@
+- [ ] LexicalError.txt
+    - [ ] Restituire riga in cui è presente l'errore
+    - [ ] Restituire quale carattere è in errore
+- [ ] Come far funzionare il programma per i test
+- [ ] Perchè mi da core dump creato quando ho un error nell'execution visitor

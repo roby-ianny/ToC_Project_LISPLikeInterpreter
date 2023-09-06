@@ -17,10 +17,11 @@ Per il parsing si utilizza il pattern del FactoryMethod, quindi il parser legge 
 Alla fine il Block associato alla classe ParseExpression conterrà un vector di statement, che verranno poi letti ed eseguiti invece dal ExecutionVisitor.
 
 # TODO
-[] Parser
-[] ExecutionVisitor
-[] Gestore delle variabili allocate
-[] Distruttore per le NumExpr e BoolExpr
+- [X] Parser
+- [X] ExecutionVisitor
+- [X] Gestore delle variabili allocate
+- [ ] Distruttore per tutte le classi
     - che altrimenti non vengono rimossti correttamente dal metodo clearMemory
-[X] Parser specifico per le espressioni numeriche
-[X] Parser specifico per le espressioni booleane 
+- [ ] UML del progetto
+- [X] Parser specifico per le espressioni numeriche
+- [X] Parser specifico per le espressioni booleane 

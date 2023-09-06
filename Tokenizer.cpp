@@ -117,10 +117,14 @@ void generateToken(std::string& term, std::vector<Token>& Tokens)
             verrà gestita l'eccezione
             */
            term.clear();
-        }      
-        /*else
-        verrà gestita l'eccezione in cui non si hanno corrispondenze
-        */  
+        } 
+        /*
+        else {
+            std::stringstream msg;
+            msg << "ERROR in tokenizer: Stray character in input" << std::endl  ;
+            throw LexicalError(msg.str());
+        }
+        */
 
        term.clear();    //per sicurezza ripulisco il buffer    
 };
@@ -161,6 +165,9 @@ void Tokenizer::tokenizeInputFile(std::ifstream& inputFile,
             } while (!std::isspace(ch) && !inputFile.eof());        //Finchè non incontro uno spazio
             //se quando esco il buffer è ancora "pieno"
             //std::cout << "Buffer: " << buffer << std::endl;
+
+            if(inputTokens.empty()) throw LexicalError("The program is empty");
+
             generateToken(buffer, inputTokens);
 
         }        

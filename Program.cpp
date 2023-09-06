@@ -1,4 +1,3 @@
-#include <sstream>
 #include <string>
 #include "Exceptions.h"
 #include "Token.h"
