@@ -7,8 +7,7 @@
 #include "Token.h"
 #include "Tokenizer.h"
 #include "Expressions.h"
-#include "Statement.h"
-#include "Block.h"
+#include "ProgramElements.h"
 #include "Program.h"
 #include "Visitor.h"
 
@@ -82,12 +81,14 @@ int main(int argc, char *argv[])
     } catch (ParseError& pe){
         std::cerr << "Errore in parsing: ";
         std::cerr << pe.what() << std::endl ;
-    } /*catch(std::exception& exc) {
+    } catch (SemanticError& se){
+        std::cerr << "Errore nella valutazione: ";
+        std::cerr << se.what() << std::endl ; 
+    } 
+    catch(std::exception& exc) {
         std::cerr << exc.what() << std::endl;
         return EXIT_FAILURE;
     }
  
     return EXIT_SUCCESS;
-*/
-
 }

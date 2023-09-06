@@ -22,7 +22,7 @@ Sulla falsa riga di quanto fornito nelle dispense e di quanto visto a lezione, i
 - Exceptions.h
     - Libreria per il gestore delle eccezioni
 - Expression.h
-    - Libreria contenente la definizione delle espressioni, nel nostro caso invece saranno degli statement block quindi potremmo anche chiamarlo "Statement.h"
+    - Libreria contenente la definizione delle espressioni, nel nostro caso invece saranno degli statement block quindi potremmo anche chiamarlo "ProgramElements.h"
 - Expression.cpp
     - Contiene i metodi che restituiscono i token corretti quando si utilizza il ExecutionVisitor
 - Expressionmanager.h

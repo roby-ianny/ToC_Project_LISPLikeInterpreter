@@ -8,8 +8,7 @@
 #include "Exceptions.h"
 #include "Token.h"
 #include "Expressions.h"
-#include "Statement.h"
-#include "Block.h"
+#include "ProgramElements.h"
 
 //Program svolge il ruolo di ParseExpression visto nell'esempio della lezione
 class Program{

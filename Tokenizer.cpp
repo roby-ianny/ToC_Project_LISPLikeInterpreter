@@ -9,6 +9,8 @@
 //Creo la funzione che mi permette di utilizzare più volte la generazione dei token a partire da una stringa
 void generateToken(std::string& term, std::vector<Token>& Tokens)
 {
+    // avere tutti i token generati da un unico "metodo" 
+    //inserire il caso "(", ")"
     if (term == "SET"){
             Tokens.push_back(Token{ Token::SET, Token::id2word[Token::SET]});
             term.clear();
@@ -143,9 +145,11 @@ void Tokenizer::tokenizeInputFile(std::ifstream& inputFile,
     {
         ch = inputFile.get();               //Leggo un carattere dal file
         if(std::isspace(ch)) continue;      //Se il carattere letto è uno spazio
+        // considerare il caso !std::isspace(ch)
         else {
             buffer.clear();
             do {
+                // rielaborare il caso delle parentesi
                 if (ch == '(')
                 {
                     // std::cout << "Buffer: " << buffer << std::endl;

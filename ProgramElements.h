@@ -1,13 +1,13 @@
-#ifndef STATEMENT_H
-#define STATEMENT_H
+#ifndef PROGRAMELEMENTS_H
+#define PROGRAMELEMENTS_H
 
 #include <string>
-#include "Block.h"
+#include <vector>
 #include "Expressions.h"
+
 
 //Forward Declaration
 class ExecutionVisitor; 
-class Block;
 
 class Statement{
     public:
@@ -15,6 +15,42 @@ class Statement{
         virtual void accept(ExecutionVisitor* v) = 0;
 };
 
+class Block{
+    public:
+        Block() {
+            std::vector<Statement*> st;     //creo un vector vuoto
+            allocated = st;                 //allocated lo pongo uguale al vector vuoto
+        }
+        ~Block(){
+            clearMemory();
+        }
+
+        //elimino costruttori di copia e assegnamento
+        Block(const Block& other) = delete;
+        Block& operator=(const Block& other) = delete;
+
+        void clearMemory(){
+            auto i = allocated.begin();
+            for(; i != allocated.end(); ++i){
+                delete(*i);
+                //NB: Così non vengono deallocati elementi come NumExpr, BoolExpr, Variabili...
+            }
+            allocated.resize(0);
+        }
+
+        std::vector<Statement*> getAllocated() const{
+            return allocated;
+        }
+
+        // Definisco questo metodo da utilizzare nel parser, questo perché evito dipendenze cicliche in questo modo
+        void push_back(Statement* s){
+            allocated.push_back(s);
+        }
+
+        void accept(ExecutionVisitor* v);
+    private:
+        std::vector<Statement*> allocated;
+};
 
 class SetStmt : public Statement {
     public: 
@@ -140,5 +176,6 @@ class WhileStmt : public Statement {
         BoolExpr* bexpr;
         Block* b;
 };
+
 
 #endif
