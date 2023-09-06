@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     {
         inputTokens = std::move(tokenize(inputFile));
         inputFile.close();  //dopo aver ottenuto la token sequence il file non è più necessario
+        std::cout << "Generazione dei Tokens terminata" << std::endl ;
     }
     catch(LexicalError& le)
     {
@@ -75,6 +76,7 @@ int main(int argc, char *argv[])
         Block* main = parse(inputTokens);
         std::cout << "Parsing terminato" << std::endl;
         //Creo l'execution visitor
+        std::cout << "Esecuzione del programma, sotto l'output restituito da esso: " << std::endl;
         ExecutionVisitor* v = new ExecutionVisitor();
         main->accept(v);
     } catch (ParseError& pe){

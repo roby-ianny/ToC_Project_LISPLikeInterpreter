@@ -158,6 +158,11 @@ void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
         {
             std::cout << "Entering in BLOCK" << std::endl;
             safe_next(itr);
+            if (itr->tag == Token::RP)
+            {
+                throw ParseError("ERROR in parser: Empty BLOCK statement");
+            }
+            
             while (itr->tag != Token::RP)
             {
                 if (itr->tag == Token::LP)
@@ -171,7 +176,7 @@ void Program::parseBlock(std::vector<Token>::const_iterator& itr, Block* b){
             }
         }
         else
-        {
+        {            
             std::cout << "Single Statement" << std::endl;
             b->push_back(recursiveParse(itr)); 
         }
@@ -285,6 +290,10 @@ Statement* Program::recursiveParse(std::vector<Token>::const_iterator& itr) {
                 throw ParseError("WHILE, Mismatched Parenthesis");
                 break;
             }
+        }
+        case Token::RP :
+        {
+            throw ParseError("ERROR in parser: Empty Statement");
         }
         default:
             throw ParseError("Invalid Token");
