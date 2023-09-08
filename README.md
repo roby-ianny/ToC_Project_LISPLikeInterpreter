@@ -20,7 +20,7 @@ Alla fine il Block associato alla classe ParseExpression conterrà un vector di 
 - [X] Parser
 - [X] ExecutionVisitor
 - [X] Gestore delle variabili allocate
-- [ ] Distruttore per tutte le classi
+- [X] Distruttore per tutte le classi
     - che altrimenti non vengono rimossti correttamente dal metodo clearMemory
 - [ ] UML del progetto
 - [X] Parser specifico per le espressioni numeriche

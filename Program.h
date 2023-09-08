@@ -28,35 +28,35 @@ class Program{
         Statement* makeSet(NumExpr* e, Variable* v){
             Statement* s = new SetStmt(e, v);
             // push_back(s);
-            std::cout << "Made set statement" << std::endl;
+            // std::cout << "Made set statement" << std::endl;
             return s;
         }
 
         Statement* makePrint(NumExpr* exp){
             Statement* s = new PrintStmt(exp);
             // push_back(s);
-            std::cout << "Made print statement" << std::endl;
+            // std::cout << "Made print statement" << std::endl;
             return s;
         }
 
         Statement* makeInput(Variable* v){
             Statement* s = new InputStmt(v);
             // push_back(s);
-            std::cout << "Made input statement" << std::endl;
+            // std::cout << "Made input statement" << std::endl;
             return s;
         }
 
         Statement* makeIf(BoolExpr* exp, Block* t, Block* f){
             Statement* s = new IfStmt(exp, t, f );
             // push_back(s);
-            std::cout << "Made if statement" << std::endl;
+            // std::cout << "Made if statement" << std::endl;
             return s;
         }
 
         Statement* makeWhile(BoolExpr* e, Block* b){
             Statement* s = new WhileStmt(e, b);
             // push_back(s);
-            std::cout << "Made while statement" << std::endl;
+            // std::cout << "Made while statement" << std::endl;
             return s;
         }
 

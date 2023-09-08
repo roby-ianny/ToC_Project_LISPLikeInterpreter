@@ -1,3 +1,0 @@
-ShortCircuit -> arriva fino allo 0, mentre dovrebbe fermarsi a 1
-- rivedere il visitor delle epressioni Booleane
-- rivedere il vistitor dei cicli while

@@ -47,26 +47,26 @@ class Operator : public NumExpr{
 
 class Number : public NumExpr{
     public:
-        Number( int v ) : value{ v } {}
+        Number( int64_t v ) : value{ v } {}
         ~Number() = default;
 
         Number(const Number& other) = default;
         Number& operator=(const Number& other) = default;
 
-        int get_Value() const{
+        int64_t get_Value() const{
             return value;
         };
 
         void accept(ExecutionVisitor* v) override;
         
     private:
-        int value;
+        int64_t value;
 
 };
 
 class Variable : public NumExpr{
     public:
-        Variable( std::string n, int v ) : name( n ), value( v ) {}
+        Variable( std::string n, int64_t v ) : name( n ), value( v ) {}
         //aggiungo un costruttore con solo id e imposto a 0 il valore iniziale della variabile
         //questo costruttore è necessario solo per il set statement, dove una var
         Variable( std::string id) : name{ id }, value{ 0 } {};
@@ -79,12 +79,12 @@ class Variable : public NumExpr{
             return name;
         }
 
-        int getValue() const{
+        int64_t getValue() const{
             return value;
         }
 
         /* É più opportuno sostituire le variabili piuttosto che modificarle
-        void setValue(int v){
+        void setValue(int64_tv){
             value = v;
         }
         */
@@ -93,7 +93,7 @@ class Variable : public NumExpr{
         
     private:
         std::string name;
-        int value;
+        int64_t value;
 };
 
 class BoolExpr{

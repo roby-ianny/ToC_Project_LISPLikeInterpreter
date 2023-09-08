@@ -55,7 +55,7 @@ class ExecutionVisitor {
             //fase iniziale, prendo in input il valore della variabile
             // std::cout << "InputStatement " << std::endl;
             std::string name = s->getVar()->getName();
-            int val;
+            int64_t val;
 
             std::cout << "Inserire il valore per la variabile " << name << ": " ;
             
@@ -123,8 +123,8 @@ class ExecutionVisitor {
             NumExpr* right = op->getRight();
             right->accept(this);
             //Prelevo i valori dall'accumulatore
-            int rval = int_accumulator.back(); int_accumulator.pop_back();
-            int lval = int_accumulator.back(); int_accumulator.pop_back();
+            int64_t rval = int_accumulator.back(); int_accumulator.pop_back();
+            int64_t lval = int_accumulator.back(); int_accumulator.pop_back();
 
             switch (op->getOp())
             {
@@ -140,12 +140,12 @@ class ExecutionVisitor {
             case Operator::DIV:
                 if (rval == 0)
                 {
-                    throw SemanticError("ERROR in evaluator: Division by zero.");
+                    throw SemanticError("Division by zero.");
                 }
                 else int_accumulator.push_back(lval/rval);
                 break;
             default:
-                throw SemanticError("SEMANTIC ERRROR: Invalid Operator");
+                throw SemanticError("Invalid Operator");
                 break;
             }
         }
@@ -182,12 +182,12 @@ class ExecutionVisitor {
             // std::cout << "Visiting Relational Operator " << std::endl;
             NumExpr* left = ro->getLeft();
             left->accept(this);
-            int lval = int_accumulator.back(); 
+            int64_t lval = int_accumulator.back(); 
             int_accumulator.pop_back();
 
             NumExpr* right = ro->getRight();
             right->accept(this);
-            int rval = int_accumulator.back(); 
+            int64_t rval = int_accumulator.back(); 
             int_accumulator.pop_back();
             
 

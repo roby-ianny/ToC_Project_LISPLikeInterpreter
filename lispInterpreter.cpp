@@ -43,12 +43,12 @@ int main(int argc, char *argv[])
     {
         inputTokens = std::move(tokenize(inputFile));
         inputFile.close();  //dopo aver ottenuto la token sequence il file non è più necessario
-        std::cout << "Generazione dei Tokens terminata" << std::endl ;
+        // std::cout << "Generazione dei Tokens terminata" << std::endl ;
     }
     catch(LexicalError& le)
     {
-        std::cerr << "Errore in fase di analisi lessicale" << std::endl;
-        std::cerr << le.what() << '\n';
+        std::cerr << "(ERROR in tokenizer: " ;
+        std::cerr << le.what() << " )" << '\n';
         return EXIT_FAILURE;
     }
     catch(std::exception& exc){
@@ -57,10 +57,11 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    // Stampa dei tokens
+    /* Stampa dei tokens
     for(Token t : inputTokens){
         std::cout << t << std::endl;
     }
+    */
 
     /*Fase 2 - Parsing
     File interessati: Expression.h, Expression.cpp, Statement.h, Statement.cpp, Program.h, Program.cpp interessati*/
@@ -73,17 +74,17 @@ int main(int argc, char *argv[])
 
     try {
         Block* main = parse(inputTokens);
-        std::cout << "Parsing terminato" << std::endl;
+        // std::cout << "Parsing terminato" << std::endl;
         //Creo l'execution visitor
-        std::cout << "Esecuzione del programma, sotto l'output restituito da esso: " << std::endl;
+        // std::cout << "Esecuzione del programma, sotto l'output restituito da esso: " << std::endl;
         ExecutionVisitor* v = new ExecutionVisitor();
         main->accept(v);
     } catch (ParseError& pe){
-        std::cerr << "Errore in parsing: ";
-        std::cerr << pe.what() << std::endl ;
+        std::cerr << "(ERROR in parser: " ;
+        std::cerr << pe.what() << " )" << '\n';
     } catch (SemanticError& se){
-        std::cerr << "Errore nella valutazione: ";
-        std::cerr << se.what() << std::endl ; 
+        std::cerr << "(ERROR in evaluator: " ;
+        std::cerr << se.what() << " )" << '\n';
     } 
     catch(std::exception& exc) {
         std::cerr << exc.what() << std::endl;
@@ -91,4 +92,5 @@ int main(int argc, char *argv[])
     }
  
     return EXIT_SUCCESS;
+
 }
