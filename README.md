@@ -16,11 +16,5 @@ Block è appunto la classe che indica il blocco, che, come definito dalla CFG, c
 Per il parsing si utilizza il pattern del FactoryMethod, quindi il parser legge una sequenza di token, e, in base a quale statement/espressione coincidono, vengono costruiti uno o più elementi della classe "Statement". 
 Alla fine il Block associato alla classe ParseExpression conterrà un vector di statement, che verranno poi letti ed eseguiti invece dal ExecutionVisitor.
 
-# TODO
-[] Parser
-[] ExecutionVisitor
-[] Gestore delle variabili allocate
-[] Distruttore per le NumExpr e BoolExpr
-    - che altrimenti non vengono rimossti correttamente dal metodo clearMemory
-[X] Parser specifico per le espressioni numeriche
-[X] Parser specifico per le espressioni booleane 
+## Analisi semantica
+Esegue le istruzioni risalendo l'albero sintattico costruito nelle fasi precedenti
